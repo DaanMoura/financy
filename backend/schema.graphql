@@ -3,6 +3,45 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
+enum CategoryIcon {
+  BRIEFCASE
+  CAR
+  EDUCATION
+  FITNESS
+  FOOD
+  GIFT
+  HEALTH
+  HOME
+  PET
+  PIGGY_BANK
+  RECEIPT
+  SHOPPING_CART
+  TICKET
+  TRAVEL
+  WALLET
+  WORK
+}
+
+type CategoryModel {
+  color: String!
+  createdAt: DateTimeISO!
+  description: String
+  icon: CategoryIcon!
+  id: ID!
+  title: String!
+  transactions: [TransactionModel!]
+  updatedAt: DateTimeISO!
+  user: UserModel
+  userId: String!
+}
+
+input CreateCategoryInput {
+  color: String!
+  description: String
+  icon: CategoryIcon!
+  title: String!
+}
+
 input CreateUserInput {
   email: String!
   name: String!
@@ -25,13 +64,17 @@ type LoginOutput {
 }
 
 type Mutation {
+  createCategory(data: CreateCategoryInput!): CategoryModel!
   createUser(data: CreateUserInput!): UserModel!
+  deleteCategory(id: String!): Boolean!
   login(data: LoginInput!): LoginOutput!
   register(data: RegisterInput!): RegisterOutput!
+  updateCategory(data: CreateCategoryInput!, id: String!): CategoryModel!
 }
 
 type Query {
   getUser(id: String!): UserModel!
+  listCategories(userId: String!): [CategoryModel!]!
 }
 
 input RegisterInput {
@@ -44,6 +87,24 @@ type RegisterOutput {
   refreshToken: String!
   token: String!
   user: UserModel!
+}
+
+type TransactionModel {
+  amount: Int!
+  category: CategoryModel
+  cateogryId: String!
+  createdAt: DateTimeISO!
+  description: String!
+  id: ID!
+  type: TransactionType!
+  updatedAt: DateTimeISO!
+  user: UserModel
+  userId: String!
+}
+
+enum TransactionType {
+  EXPENSE
+  INCOME
 }
 
 type UserModel {

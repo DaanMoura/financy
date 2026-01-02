@@ -17,4 +17,61 @@ model User {
   password  String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  transactions Transaction[]
+  categories   Category[]
+}
+
+enum CategoryIcon {
+  WORK
+  CAR
+  HEALTH
+  PIGGY_BANK
+  SHOPPING_CART
+  TICKET
+  BRIEFCASE
+  FOOD
+  PET
+  HOME
+  GIFT
+  FITNESS
+  EDUCATION
+  TRAVEL
+  WALLET
+  RECEIPT
+}
+
+model Category {
+  id          String       @id @default(uuid())
+  title       String
+  description String?
+  icon        CategoryIcon
+  color       String
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  userId       String
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transactions Transaction[]
+}
+
+enum TransactionType {
+  EXPENSE
+  INCOME
+}
+
+model Transaction {
+  id          String          @id @default(uuid())
+  description String
+  type        TransactionType
+  amount      Int
+  date        DateTime
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 }
