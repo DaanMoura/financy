@@ -1,11 +1,11 @@
-import { Field, GraphQLISODateTime, ID, ObjectType, registerEnumType } from "type-graphql";
-import { UserModel } from "./user.model";
-import { TransactionModel } from "./transaction.model";
-import { CategoryIcon } from "@prisma/client";
+import { Field, GraphQLISODateTime, ID, ObjectType, registerEnumType } from 'type-graphql'
+import { UserModel } from './user.model'
+import { TransactionModel } from './transaction.model'
+import { CategoryIcon } from '@prisma/client'
 
 registerEnumType(CategoryIcon, {
-  name: "CategoryIcon",
-});
+  name: 'CategoryIcon'
+})
 
 @ObjectType()
 export class CategoryModel {

@@ -92,8 +92,9 @@ type RegisterOutput {
 type TransactionModel {
   amount: Int!
   category: CategoryModel
-  cateogryId: String!
+  categoryId: String!
   createdAt: DateTimeISO!
+  date: DateTimeISO!
   description: String!
   id: ID!
   type: TransactionType!

@@ -1,5 +1,5 @@
-import { prismaClient } from "../client/prisma";
-import { CreateCategoryInput, UpdateCategoryInput } from "../dtos/input/category.input";
+import { prismaClient } from '../client/prisma'
+import { CreateCategoryInput, UpdateCategoryInput } from '../dtos/input/category.input'
 
 export class CategoryService {
   async createCategory(data: CreateCategoryInput, userId: string) {
@@ -14,13 +14,17 @@ export class CategoryService {
     })
   }
 
-  async updateCategory(id: string, data: UpdateCategoryInput) {
+  async updateCategory(id: string, data: UpdateCategoryInput, userId: string) {
     const category = await prismaClient.category.findUnique({
-      where: { id },
-    });
+      where: { id }
+    })
 
     if (!category) {
-      throw new Error('Category not found');
+      throw new Error('Category not found')
+    }
+
+    if (category.userId !== userId) {
+      throw new Error('User is not authorized to update category of another user')
     }
 
     return prismaClient.category.update({
@@ -34,13 +38,17 @@ export class CategoryService {
     })
   }
 
-  async deleteCategory(id: string) {
+  async deleteCategory(id: string, userId: string) {
     const category = await prismaClient.category.findUnique({
-      where: { id },
-    });
+      where: { id }
+    })
 
     if (!category) {
-      throw new Error('Category not found');
+      throw new Error('Category not found')
+    }
+
+    if (category.userId !== userId) {
+      throw new Error('User is not authorized to delete category of another user')
     }
 
     return prismaClient.category.delete({
@@ -50,7 +58,23 @@ export class CategoryService {
 
   async listCategories(userId: string) {
     return prismaClient.category.findMany({
-      where: { userId },
+      where: { userId }
     })
+  }
+
+  async findCategoryById(id: string, userId: string) {
+    const category = await prismaClient.category.findUnique({
+      where: { id }
+    })
+
+    if (!category) {
+      throw new Error('Category not found')
+    }
+
+    if (category.userId !== userId) {
+      throw new Error('User is not authorized to access category of another user')
+    }
+
+    return category
   }
 }

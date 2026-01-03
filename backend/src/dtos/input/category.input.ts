@@ -1,5 +1,5 @@
-import { CategoryIcon } from "@prisma/client";
-import { Field, InputType } from "type-graphql";
+import { CategoryIcon } from '@prisma/client'
+import { Field, InputType } from 'type-graphql'
 
 @InputType()
 export class CreateCategoryInput {

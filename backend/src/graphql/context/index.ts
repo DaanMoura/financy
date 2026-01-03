@@ -1,4 +1,3 @@
-
 import { ExpressContextFunctionArgument } from '@as-integrations/express5'
 import { verifyJwt } from '../../utils/jwt'
 
