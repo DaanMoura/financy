@@ -18,7 +18,7 @@ export class CreateCategoryInput {
 
 @InputType()
 export class UpdateCategoryInput {
-  @Field(() => String, { nullable: false })
+  @Field(() => String, { nullable: true })
   title?: string
 
   @Field(() => String, { nullable: true })

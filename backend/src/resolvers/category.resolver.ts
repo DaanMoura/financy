@@ -2,7 +2,7 @@ import { Arg, Mutation, Query, Resolver, UseMiddleware } from "type-graphql";
 import { CategoryModel } from "../models/category.model";
 import { IsAuth } from "../middlewares/auth.middleware";
 import { CategoryService } from "../services/category.service";
-import { CreateCategoryInput } from "../dtos/input/category.input";
+import { CreateCategoryInput, UpdateCategoryInput } from "../dtos/input/category.input";
 import { GqlUser } from "../graphql/decorators/user.decorator";
 import { User } from "@prisma/client";
 
@@ -22,7 +22,7 @@ export class CategoryResolver {
   @Mutation(() => CategoryModel)
   async updateCategory(
     @Arg("id", () => String) id: string,
-    @Arg("data", () => CreateCategoryInput) data: CreateCategoryInput,
+    @Arg("data", () => UpdateCategoryInput) data: UpdateCategoryInput,
   ): Promise<CategoryModel> {
     return this.categoryService.updateCategory(id, data);
   }
@@ -35,8 +35,8 @@ export class CategoryResolver {
 
   @Query(() => [CategoryModel])
   async listCategories(
-    @Arg('userId', () => String) userId: string,
+    @GqlUser() user: User
   ): Promise<CategoryModel[]> {
-    return this.categoryService.listCategories(userId)
+    return this.categoryService.listCategories(user.id)
   }
 }
