@@ -8,7 +8,7 @@
     "lineEnding": "lf",
     "lineWidth": 100,
     "attributePosition": "auto",
-    "includes": ["**", "!**/node_modules", "!**/dist", "!**/coverage"]
+    "includes": ["**", "!**/node_modules", "!**/dist", "!index.html"]
   },
   "assist": { "actions": { "source": { "organizeImports": "off" } } },
   "linter": {
@@ -103,13 +103,20 @@
         "useDefaultSwitchClauseLast": "error",
         "useNamespaceKeyword": "error",
         "noWith": "error",
-        "noVar": "warn"
+        "noVar": "warn",
+        "noConsole": {
+          "level": "warn",
+          "options": {
+            "allow": ["assert", "error", "info", "warn"]
+          }
+        }
       }
     },
-    "includes": ["**", "!**/node_modules", "!**/dist", "!**/coverage"]
+    "includes": ["**", "!**/node_modules", "!**/dist", "!index.html"]
   },
   "javascript": {
     "formatter": {
+      "jsxQuoteStyle": "double",
       "quoteProperties": "asNeeded",
       "trailingCommas": "none",
       "semicolons": "asNeeded",
@@ -118,9 +125,6 @@
       "bracketSameLine": false,
       "quoteStyle": "single",
       "attributePosition": "auto"
-    },
-    "parser": {
-      "unsafeParameterDecoratorsEnabled": true
     },
     "globals": ["document", "navigator", "window"]
   },
@@ -159,8 +163,23 @@
           }
         }
       }
+    },
+    {
+      "includes": ["**/*.test.tsx"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noConsole": { "level": "off" }
+          }
+        }
+      }
     }
   ],
+  "css": {
+    "parser": {
+      "tailwindDirectives": true
+    }
+  },
   "vcs": {
     "enabled": true,
     "clientKind": "git",
