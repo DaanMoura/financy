@@ -1,4 +1,5 @@
 import { Card } from '@/components/ui/card'
+import { Toaster } from '@/components/ui/sonner'
 import logo from '@/assets/Financy_Logo.svg'
 import Background from './Background'
 import { Outlet } from 'react-router-dom'
@@ -14,6 +15,7 @@ const AuthLayout = () => {
           </Card>
         </main>
       </div>
+      <Toaster />
     </Background>
   )
 }

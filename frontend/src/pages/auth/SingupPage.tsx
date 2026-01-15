@@ -6,12 +6,37 @@ import {
   InputGroupButton,
   InputGroupInput
 } from '@/components/ui/input-group'
+import { useAuthStore } from '@/stores/auth'
+import { useMutation } from '@tanstack/react-query'
 import { EyeIcon, EyeOffIcon, LockIcon, LogInIcon, MailIcon, UserRound } from 'lucide-react'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { toast } from 'sonner'
 
 const SignupPage = () => {
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   const [isPasswordVisible, setIsPasswordVisible] = useState(false)
+
+  const signup = useAuthStore(state => state.signup)
+
+  const { mutate: performSignup, isPending } = useMutation({
+    mutationFn: async () => {
+      await signup({ name, email, password })
+    },
+    onSuccess: () => {
+      toast.success('Cadastro realizado com sucesso!')
+    },
+    onError: () => {
+      toast.error('Falha ao realizar o cadastro!')
+    }
+  })
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    performSignup()
+  }
 
   return (
     <div className="flex flex-col gap-8">
@@ -23,12 +48,19 @@ const SignupPage = () => {
       </div>
 
       <div className="flex flex-col">
-        <form className="flex flex-col gap-6">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-6">
           <FieldGroup className="gap-4">
             <Field>
               <FieldLabel>Nome completo</FieldLabel>
               <InputGroup>
-                <InputGroupInput placeholder="Seu nome completo" type="text" />
+                <InputGroupInput
+                  id="name"
+                  placeholder="Seu nome completo"
+                  type="text"
+                  value={name}
+                  onChange={e => setName(e.target.value)}
+                  required
+                />
                 <InputGroupAddon>
                   <UserRound />
                 </InputGroupAddon>
@@ -38,7 +70,14 @@ const SignupPage = () => {
             <Field>
               <FieldLabel>E-mail</FieldLabel>
               <InputGroup>
-                <InputGroupInput placeholder="mail@exemplo.com" type="email" />
+                <InputGroupInput
+                  id="email"
+                  placeholder="mail@exemplo.com"
+                  type="email"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  required
+                />
                 <InputGroupAddon>
                   <MailIcon />
                 </InputGroupAddon>
@@ -49,8 +88,12 @@ const SignupPage = () => {
               <FieldLabel>Password</FieldLabel>
               <InputGroup>
                 <InputGroupInput
+                  id="password"
                   placeholder="Digite sua senha"
                   type={isPasswordVisible ? 'text' : 'password'}
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
+                  required
                 />
                 <InputGroupAddon>
                   <LockIcon />
@@ -72,7 +115,9 @@ const SignupPage = () => {
             </Field>
           </FieldGroup>
 
-          <Button className="w-full">Cadastrar</Button>
+          <Button type="submit" disabled={isPending} className="w-full">
+            Cadastrar
+          </Button>
 
           <div className="flex gap-2 w-full items-center justify-center-safe">
             <div className="h-px bg-gray-300 w-full" />
@@ -86,7 +131,7 @@ const SignupPage = () => {
             <Link to="/">
               <Button className="w-full" variant="outline">
                 <LogInIcon />
-                <span>Criar conta</span>
+                <span>Fazer login</span>
               </Button>
             </Link>
           </div>

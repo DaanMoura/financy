@@ -7,13 +7,37 @@ import {
   InputGroupButton,
   InputGroupInput
 } from '@/components/ui/input-group'
+import { useAuthStore } from '@/stores/auth'
 import { Label } from '@radix-ui/react-label'
 import { EyeIcon, EyeOffIcon, LockIcon, MailIcon, UserRoundPlusIcon } from 'lucide-react'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useMutation } from '@tanstack/react-query'
+import { toast } from 'sonner'
 
 const LoginPage = () => {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   const [isPasswordVisible, setIsPasswordVisible] = useState(false)
+
+  const login = useAuthStore(state => state.login)
+
+  const { mutate: performLogin, isPending } = useMutation({
+    mutationFn: async () => {
+      await login({ email, password })
+    },
+    onSuccess: () => {
+      toast.success('Login realizado com sucesso!')
+    },
+    onError: () => {
+      toast.error('Falha ao realizar o login!')
+    }
+  })
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    performLogin()
+  }
 
   return (
     <div className="flex flex-col gap-8">
@@ -25,12 +49,19 @@ const LoginPage = () => {
       </div>
 
       <div className="flex flex-col">
-        <form className="flex flex-col gap-6">
+        <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
           <FieldGroup className="gap-4">
             <Field>
               <FieldLabel>E-mail</FieldLabel>
               <InputGroup>
-                <InputGroupInput placeholder="mail@exemplo.com" type="email" />
+                <InputGroupInput
+                  id="email"
+                  required
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  placeholder="mail@exemplo.com"
+                  type="email"
+                />
                 <InputGroupAddon>
                   <MailIcon />
                 </InputGroupAddon>
@@ -41,8 +72,12 @@ const LoginPage = () => {
               <FieldLabel>Password</FieldLabel>
               <InputGroup>
                 <InputGroupInput
+                  id="password"
                   placeholder="Digite sua senha"
                   type={isPasswordVisible ? 'text' : 'password'}
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
+                  required
                 />
                 <InputGroupAddon>
                   <LockIcon />
@@ -73,7 +108,9 @@ const LoginPage = () => {
             </div>
           </FieldGroup>
 
-          <Button className="w-full">Entrar</Button>
+          <Button type="submit" disabled={isPending} className="w-full">
+            Entrar
+          </Button>
 
           <div className="flex gap-2 w-full items-center justify-center-safe">
             <div className="h-px bg-gray-300 w-full" />
