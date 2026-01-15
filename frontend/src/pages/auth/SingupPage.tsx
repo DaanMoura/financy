@@ -1,32 +1,40 @@
 import { Button } from '@/components/ui/button'
-import { Checkbox } from '@/components/ui/checkbox'
-import { Field, FieldGroup, FieldLabel } from '@/components/ui/field'
+import { Field, FieldDescription, FieldGroup, FieldLabel } from '@/components/ui/field'
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupButton,
   InputGroupInput
 } from '@/components/ui/input-group'
-import { Label } from '@radix-ui/react-label'
-import { EyeIcon, EyeOffIcon, LockIcon, MailIcon, UserRoundPlusIcon } from 'lucide-react'
+import { EyeIcon, EyeOffIcon, LockIcon, LogInIcon, MailIcon, UserRound } from 'lucide-react'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 
-const LoginPage = () => {
+const SignupPage = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false)
 
   return (
     <div className="flex flex-col gap-8">
       <div className="flex flex-col">
-        <h1 className="text-gray-800 text-[20px] text-center font-bold">Fazer login</h1>
+        <h1 className="text-gray-800 text-[20px] text-center font-bold">Criar conta</h1>
         <p className="text-gray-600 text-[16px] text-center font-normal">
-          Entre na sua conta para continuar
+          Comece a controlar suas finanças ainda hoje
         </p>
       </div>
 
       <div className="flex flex-col">
         <form className="flex flex-col gap-6">
           <FieldGroup className="gap-4">
+            <Field>
+              <FieldLabel>Nome completo</FieldLabel>
+              <InputGroup>
+                <InputGroupInput placeholder="Seu nome completo" type="text" />
+                <InputGroupAddon>
+                  <UserRound />
+                </InputGroupAddon>
+              </InputGroup>
+            </Field>
+
             <Field>
               <FieldLabel>E-mail</FieldLabel>
               <InputGroup>
@@ -58,22 +66,13 @@ const LoginPage = () => {
                   </InputGroupButton>
                 </InputGroupAddon>
               </InputGroup>
+              <FieldDescription className="text-[12px] mt-2">
+                A senha deve ter no mínimo 8 caracteres
+              </FieldDescription>
             </Field>
-
-            <div className="flex justify-between items-center">
-              <div className="flex items-center gap-3">
-                <Checkbox id="remember-me" />
-                <Label className="text-gray-700 text-[14px]" htmlFor="remember-me">
-                  Lembrar-me
-                </Label>
-              </div>
-              <a className="text-brand-base text-[14px]" href="/auth/forgot-password">
-                Recuperar senha
-              </a>
-            </div>
           </FieldGroup>
 
-          <Button className="w-full">Entrar</Button>
+          <Button className="w-full">Cadastrar</Button>
 
           <div className="flex gap-2 w-full items-center justify-center-safe">
             <div className="h-px bg-gray-300 w-full" />
@@ -82,13 +81,11 @@ const LoginPage = () => {
           </div>
 
           <div className="flex flex-col gap-4">
-            <p className="text-gray-600 text-[16px] text-center font-normal">
-              Ainda não tem uma conta?
-            </p>
+            <p className="text-gray-600 text-[16px] text-center font-normal">Já tem uma conta?</p>
 
-            <Link to="/signup">
+            <Link to="/">
               <Button className="w-full" variant="outline">
-                <UserRoundPlusIcon />
+                <LogInIcon />
                 <span>Criar conta</span>
               </Button>
             </Link>
@@ -99,4 +96,4 @@ const LoginPage = () => {
   )
 }
 
-export default LoginPage
+export default SignupPage

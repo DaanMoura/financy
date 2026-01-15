@@ -9,7 +9,8 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: 'bg-brand-base text-neutral-white hover:bg-brand-dark disabled:bg-brand-base/50 disabled:text-neutral-white/50',
+        default:
+          'bg-brand-base text-neutral-white hover:bg-brand-dark disabled:bg-brand-base/50 disabled:text-neutral-white/50',
         outline:
           'border border-gray-300 bg-neutral-white hover:bg-accent text-gray-700 hover:bg-gray-200 disabled:border-gray-300/50 disabled:bg-neutral-white disabled:text-gray-300/50',
         ghost: 'hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50',
@@ -18,7 +19,7 @@ const buttonVariants = cva(
       size: {
         md: 'h-12 px-4 py-3',
         sm: 'h-9 px-3 py-2',
-        icon: 'h-8 p-2',
+        icon: 'h-8 p-2'
       }
     },
     defaultVariants: {
