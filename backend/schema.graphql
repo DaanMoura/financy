@@ -23,6 +23,7 @@ enum CategoryIcon {
 }
 
 type CategoryModel {
+  category: CategoryModel!
   color: String!
   createdAt: DateTimeISO!
   description: String
@@ -40,6 +41,14 @@ input CreateCategoryInput {
   description: String
   icon: CategoryIcon!
   title: String!
+}
+
+input CreateTransactionInput {
+  amount: Int!
+  categoryId: String!
+  date: DateTimeISO!
+  description: String!
+  type: TransactionType!
 }
 
 input CreateUserInput {
@@ -65,8 +74,10 @@ type LoginOutput {
 
 type Mutation {
   createCategory(data: CreateCategoryInput!): CategoryModel!
+  createTransaction(data: CreateTransactionInput!): TransactionModel!
   createUser(data: CreateUserInput!): UserModel!
   deleteCategory(id: String!): Boolean!
+  deleteTransaction(id: String!): Boolean!
   login(data: LoginInput!): LoginOutput!
   register(data: RegisterInput!): RegisterOutput!
   updateCategory(data: UpdateCategoryInput!, id: String!): CategoryModel!
@@ -75,6 +86,7 @@ type Mutation {
 type Query {
   getUser(id: String!): UserModel!
   listCategories: [CategoryModel!]!
+  listTransactions: [TransactionModel!]!
 }
 
 input RegisterInput {
