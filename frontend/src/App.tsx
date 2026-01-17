@@ -1,14 +1,51 @@
-import { Route, Routes } from 'react-router-dom'
+import { Navigate, Route, Routes } from 'react-router-dom'
 import AuthLayout from './components/layout/AuthLayout'
-import LoginPage from './pages/auth/LoginPage'
-import SignupPage from './pages/auth/SingupPage'
+import SignupPage from './pages/SignupPage'
+import { useAuthStore } from './stores/auth'
+import AppLayout from './components/layout/AppLayout'
+import RootPage from './pages/RootPage'
+import TransactionsPage from './pages/TransactionsPage'
+import CategoriesPage from './pages/CategoriesPage'
+import ProfilePage from './pages/ProfilePage'
+
+function ProtectedRoute({ children }: { children: React.ReactNode }) {
+  const { isAuthenticated } = useAuthStore()
+  return isAuthenticated ? <>{children}</> : <Navigate to="/" replace />
+}
 
 function App() {
+  const { isAuthenticated } = useAuthStore()
+  const layout = isAuthenticated ? <AppLayout /> : <AuthLayout />
+
   return (
     <Routes>
-      <Route element={<AuthLayout />}>
-        <Route path="/" element={<LoginPage />} />
+      <Route element={layout}>
+        <Route path="/" element={<RootPage />} />
         <Route path="/signup" element={<SignupPage />} />
+        <Route
+          path="/transactions"
+          element={
+            <ProtectedRoute>
+              <TransactionsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/categories"
+          element={
+            <ProtectedRoute>
+              <CategoriesPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <ProfilePage />
+            </ProtectedRoute>
+          }
+        />
       </Route>
     </Routes>
   )
