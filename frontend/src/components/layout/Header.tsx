@@ -21,10 +21,10 @@ const Header = () => {
           Dashboard
         </NavLink>
         <NavLink to="/transactions" className={getLinkClass}>
-          Transactions
+          Transações
         </NavLink>
         <NavLink to="/categories" className={getLinkClass}>
-          Categories
+          Categorias
         </NavLink>
       </nav>
       <div>
