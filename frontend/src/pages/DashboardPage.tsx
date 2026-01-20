@@ -45,7 +45,10 @@ const DashboardPage = () => {
               <CardTitle className="text-xs font-bold tracking-wider text-gray-500 uppercase">
                 Transações Recentes
               </CardTitle>
-              <Button variant="link" className="h-auto p-0 text-sm font-medium text-green-600 hover:no-underline">
+              <Button
+                variant="link"
+                className="h-auto p-0 text-sm font-medium text-green-600 hover:no-underline"
+              >
                 Ver todas <ChevronRight className="ml-1 h-4 w-4" />
               </Button>
             </CardHeader>
@@ -60,7 +63,7 @@ const DashboardPage = () => {
                     categoryColor: 'bg-green-100 text-green-700',
                     icon: Wallet,
                     iconColor: 'bg-green-100 text-green-600',
-                    isIncome: true,
+                    isIncome: true
                   },
                   {
                     title: 'Jantar no Restaurante',
@@ -70,7 +73,7 @@ const DashboardPage = () => {
                     categoryColor: 'bg-blue-100 text-blue-700',
                     icon: Wallet, // Using Wallet as placeholder for Utensils
                     iconColor: 'bg-blue-100 text-blue-600',
-                    isIncome: false,
+                    isIncome: false
                   },
                   {
                     title: 'Posto de Gasolina',
@@ -80,7 +83,7 @@ const DashboardPage = () => {
                     categoryColor: 'bg-purple-100 text-purple-700',
                     icon: Wallet, // Placeholder
                     iconColor: 'bg-purple-100 text-purple-600',
-                    isIncome: false,
+                    isIncome: false
                   },
                   {
                     title: 'Compras no Mercado',
@@ -90,7 +93,7 @@ const DashboardPage = () => {
                     categoryColor: 'bg-orange-100 text-orange-700',
                     icon: Wallet, // Placeholder
                     iconColor: 'bg-orange-100 text-orange-600',
-                    isIncome: false,
+                    isIncome: false
                   },
                   {
                     title: 'Retorno de Investimento',
@@ -100,12 +103,17 @@ const DashboardPage = () => {
                     categoryColor: 'bg-green-100 text-green-700',
                     icon: Wallet, // Placeholder
                     iconColor: 'bg-green-100 text-green-600',
-                    isIncome: true,
-                  },
+                    isIncome: true
+                  }
                 ].map((item, index) => (
-                  <div key={index} className="flex items-center justify-between p-4 hover:bg-gray-50">
+                  <div
+                    key={index}
+                    className="flex items-center justify-between p-4 hover:bg-gray-50"
+                  >
                     <div className="flex items-center gap-4">
-                      <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${item.iconColor}`}>
+                      <div
+                        className={`flex h-10 w-10 items-center justify-center rounded-lg ${item.iconColor}`}
+                      >
                         <item.icon className="h-5 w-5" />
                       </div>
                       <div>
@@ -114,9 +122,7 @@ const DashboardPage = () => {
                       </div>
                     </div>
                     <div className="flex items-center gap-4">
-                      <Chip color={item.categoryColor}>
-                        {item.category}
-                      </Chip>
+                      <Chip color={item.categoryColor}>{item.category}</Chip>
                       <div className="flex items-center gap-2 font-medium">
                         <span className={item.isIncome ? 'text-gray-900' : 'text-gray-900'}>
                           {item.amount}
@@ -132,7 +138,10 @@ const DashboardPage = () => {
                 ))}
               </div>
               <div className="border-t border-gray-100 p-4">
-                <Button variant="ghost" className="w-full justify-center text-green-600 hover:bg-green-50 hover:text-green-700">
+                <Button
+                  variant="ghost"
+                  className="w-full justify-center text-green-600 hover:bg-green-50 hover:text-green-700"
+                >
                   <Plus className="mr-2 h-4 w-4" /> Nova transação
                 </Button>
               </div>
@@ -147,23 +156,52 @@ const DashboardPage = () => {
               <CardTitle className="text-xs font-bold tracking-wider text-gray-500 uppercase">
                 Categorias
               </CardTitle>
-              <Button variant="link" className="h-auto p-0 text-sm font-medium text-green-600 hover:no-underline">
+              <Button
+                variant="link"
+                className="h-auto p-0 text-sm font-medium text-green-600 hover:no-underline"
+              >
                 Gerenciar <ChevronRight className="ml-1 h-4 w-4" />
               </Button>
             </CardHeader>
             <CardContent className="p-0">
               <div className="divide-y divide-gray-100">
                 {[
-                  { name: 'Alimentação', items: 12, amount: 'R$ 542,30', color: 'bg-blue-100 text-blue-700' },
-                  { name: 'Transporte', items: 8, amount: 'R$ 385,50', color: 'bg-purple-100 text-purple-700' },
-                  { name: 'Mercado', items: 3, amount: 'R$ 298,75', color: 'bg-orange-100 text-orange-700' },
-                  { name: 'Entretenimento', items: 2, amount: 'R$ 186,20', color: 'bg-pink-100 text-pink-700' },
-                  { name: 'Utilidades', items: 7, amount: 'R$ 245,80', color: 'bg-yellow-100 text-yellow-700' },
+                  {
+                    name: 'Alimentação',
+                    items: 12,
+                    amount: 'R$ 542,30',
+                    color: 'bg-blue-100 text-blue-700'
+                  },
+                  {
+                    name: 'Transporte',
+                    items: 8,
+                    amount: 'R$ 385,50',
+                    color: 'bg-purple-100 text-purple-700'
+                  },
+                  {
+                    name: 'Mercado',
+                    items: 3,
+                    amount: 'R$ 298,75',
+                    color: 'bg-orange-100 text-orange-700'
+                  },
+                  {
+                    name: 'Entretenimento',
+                    items: 2,
+                    amount: 'R$ 186,20',
+                    color: 'bg-pink-100 text-pink-700'
+                  },
+                  {
+                    name: 'Utilidades',
+                    items: 7,
+                    amount: 'R$ 245,80',
+                    color: 'bg-yellow-100 text-yellow-700'
+                  }
                 ].map((category, index) => (
-                  <div key={index} className="flex items-center justify-between p-4 hover:bg-gray-50">
-                    <Chip color={category.color}>
-                      {category.name}
-                    </Chip>
+                  <div
+                    key={index}
+                    className="flex items-center justify-between p-4 hover:bg-gray-50"
+                  >
+                    <Chip color={category.color}>{category.name}</Chip>
                     <div className="flex items-center gap-4">
                       <span className="text-sm text-gray-500">{category.items} itens</span>
                       <span className="font-medium text-gray-900">{category.amount}</span>
