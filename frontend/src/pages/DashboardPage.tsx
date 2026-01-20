@@ -1,5 +1,5 @@
 import { ArrowDownCircle, ArrowUpCircle, ChevronRight, Plus, Wallet } from 'lucide-react'
-import { Chip } from '@/components/custom/Chip'
+import { Tag } from '@/components/custom/Tag'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
@@ -122,7 +122,7 @@ const DashboardPage = () => {
                       </div>
                     </div>
                     <div className="flex items-center gap-4">
-                      <Chip color={item.categoryColor}>{item.category}</Chip>
+                      <Tag color={item.categoryColor}>{item.category}</Tag>
                       <div className="flex items-center gap-2 font-medium">
                         <span className={item.isIncome ? 'text-gray-900' : 'text-gray-900'}>
                           {item.amount}
@@ -201,7 +201,7 @@ const DashboardPage = () => {
                     key={index}
                     className="flex items-center justify-between p-4 hover:bg-gray-50"
                   >
-                    <Chip color={category.color}>{category.name}</Chip>
+                    <Tag color={category.color}>{category.name}</Tag>
                     <div className="flex items-center gap-4">
                       <span className="text-sm text-gray-500">{category.items} itens</span>
                       <span className="font-medium text-gray-900">{category.amount}</span>
