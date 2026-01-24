@@ -1,12 +1,12 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
 import AuthLayout from './components/layout/AuthLayout'
-import SignupPage from './pages/SignupPage'
+import SignupPage from './pages/auth/SignupPage'
 import { useAuthStore } from './stores/auth'
 import AppLayout from './components/layout/AppLayout'
 import RootPage from './pages/RootPage'
-import TransactionsPage from './pages/TransactionsPage'
-import CategoriesPage from './pages/CategoriesPage'
-import ProfilePage from './pages/ProfilePage'
+import TransactionsPage from './pages/transactions/TransactionsPage'
+import CategoriesPage from './pages/categories/CategoriesPage'
+import ProfilePage from './pages/profile/ProfilePage'
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { isAuthenticated } = useAuthStore()

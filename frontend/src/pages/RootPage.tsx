@@ -1,6 +1,6 @@
 import { useAuthStore } from '@/stores/auth'
-import LoginPage from './LoginPage'
-import DashboardPage from './DashboardPage'
+import LoginPage from './auth/LoginPage'
+import DashboardPage from './dashboard/DashboardPage'
 
 const RootPage = () => {
   const { isAuthenticated } = useAuthStore()
