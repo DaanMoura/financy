@@ -1,6 +1,13 @@
-import { gql } from '@apollo/client'
+import { gql, type TypedDocumentNode } from '@apollo/client'
+import type { Category } from '../../../types'
 
-export const LIST_CATEGORIES = gql`
+export interface ListCategoriesQuery {
+  listCategories: Pick<Category, 'id' | 'title' | 'description' | 'color' | 'icon' | 'transactions'>[]
+}
+
+export type ListCategoriesQueryVariables = Record<string, never>
+
+export const LIST_CATEGORIES: TypedDocumentNode<ListCategoriesQuery, ListCategoriesQueryVariables> = gql`
   query ListCategories {
     listCategories {
       id
@@ -8,8 +15,9 @@ export const LIST_CATEGORIES = gql`
       description
       color
       icon
-      createdAt
-      updatedAt
+      transactions {
+        id
+      }
     }
   }
 `

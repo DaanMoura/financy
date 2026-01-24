@@ -42,8 +42,9 @@ export interface Category {
   description?: string | null
   color: string
   icon: CategoryIcon
-  createdAt: string
-  updatedAt: string
+  transactions: { id: string }[]
+  createdAt?: string
+  updatedAt?: string
 }
 
 export interface CreateCategoryInput {
