@@ -21,3 +21,21 @@ export const LIST_CATEGORIES: TypedDocumentNode<ListCategoriesQuery, ListCategor
     }
   }
 `
+
+export interface ListCategoriesSelectQuery {
+  listCategories: Pick<Category, 'id' | 'title'>[]
+}
+
+export type ListCategoriesSelectQueryVariables = Record<string, never>
+
+export const LIST_CATEGORIES_SELECT: TypedDocumentNode<
+  ListCategoriesSelectQuery,
+  ListCategoriesSelectQueryVariables
+> = gql`
+  query ListCategoriesSelect {
+    listCategories {
+      id
+      title
+    }
+  }
+`

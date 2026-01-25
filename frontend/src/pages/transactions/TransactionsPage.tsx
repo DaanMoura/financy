@@ -2,7 +2,7 @@ import { ChevronLeft, ChevronRight, Pencil, Plus, Search, Trash } from 'lucide-r
 import { IconButton } from '@/components/custom/IconButton'
 import { PaginationButton } from '@/components/custom/PaginationButton'
 import { Tag } from '@/components/custom/Tag'
-import { TransactionTypeIndicator } from '@/components/custom/TransactionType'
+import { TransactionTypeIndicator } from '@/components/domains/transaction/TransactionType'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group'
@@ -15,43 +15,9 @@ import {
 } from '@/components/ui/select'
 import { LIST_TRANSACTIONS } from '@/lib/graphql/queries/ListTransactions'
 import { useQuery } from '@apollo/client/react'
+import NewTransactionDialog from '@/components/domains/transaction/NewTransactionDialog'
 
 const TransactionsPage = () => {
-  // const transactions = [
-  //   {
-  //     title: 'Desenvolvimento de Site',
-  //     date: '12/07/2024',
-  //     amount: 'R$ 12.000,00',
-  //     tag: 'Venda',
-  //     tagColor: 'bg-pink-100 text-pink-700',
-  //     type: 'income' as const
-  //   },
-  //   {
-  //     title: 'Hamburguer',
-  //     date: '11/07/2024',
-  //     amount: 'R$ 50,00',
-  //     tag: 'Alimentação',
-  //     tagColor: 'bg-blue-100 text-blue-700',
-  //     type: 'outcome' as const
-  //   },
-  //   {
-  //     title: 'Aluguel do Apartamento',
-  //     date: '10/07/2024',
-  //     amount: 'R$ 1.200,00',
-  //     tag: 'Casa',
-  //     tagColor: 'bg-yellow-100 text-yellow-700',
-  //     type: 'outcome' as const
-  //   },
-  //   {
-  //     title: 'Computador',
-  //     date: '09/07/2024',
-  //     amount: 'R$ 5.000,00',
-  //     tag: 'Exemplo',
-  //     tagColor: 'bg-neutral-gray-100 text-gray-700',
-  //     type: 'outcome' as const
-  //   }
-  // ]
-
   const { data } = useQuery(LIST_TRANSACTIONS)
 
   const transactions = data?.listTransactions || []
@@ -63,10 +29,12 @@ const TransactionsPage = () => {
           <h1 className="text-2xl font-bold text-gray-900">Transações</h1>
           <p className="text-gray-500">Gerencie todas as suas transações financeiras</p>
         </div>
-        <Button className="font-semibold">
-          <Plus className="mr-2 h-4 w-4" />
-          Nova transação
-        </Button>
+        <NewTransactionDialog>
+          <Button size="sm" className="font-semibold">
+            <Plus className="mr-2 h-4 w-4" />
+            Nova transação
+          </Button>
+        </NewTransactionDialog>
       </div>
 
       <div className="grid gap-6">

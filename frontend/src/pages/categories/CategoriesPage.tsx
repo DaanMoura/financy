@@ -16,7 +16,7 @@ import { useQuery } from '@apollo/client/react'
 import { ArrowUpDown, SquarePen, TagIcon, Trash, Plus } from 'lucide-react'
 import { useMemo } from 'react'
 import { DynamicIcon } from 'lucide-react/dynamic'
-import NewCategoryDialog from './NewCategoryDialog'
+import NewCategoryDialog from '../../components/domains/category/NewCategoryDialog'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 
