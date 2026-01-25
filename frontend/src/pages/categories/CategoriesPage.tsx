@@ -13,12 +13,12 @@ import { LIST_CATEGORIES } from '@/lib/graphql/queries/ListCategories'
 import { CategoryIcon } from '@/types'
 import { getCategoryIconName } from '@/utils/categoryIcons'
 import { useQuery } from '@apollo/client/react'
-import { ArrowUpDown, Pencil, SquarePen, Tag as TagIcon, Trash, Trash2 } from 'lucide-react'
+import { ArrowUpDown, SquarePen, TagIcon, Trash, Plus } from 'lucide-react'
 import { useMemo } from 'react'
 import { DynamicIcon } from 'lucide-react/dynamic'
 import NewCategoryDialog from './NewCategoryDialog'
 import { cn } from '@/lib/utils'
-import { CATEGORY_COLORS } from '@/constants/colors'
+import { Button } from '@/components/ui/button'
 
 const CategoriesPage = () => {
   const { data } = useQuery(LIST_CATEGORIES)
@@ -43,7 +43,12 @@ const CategoriesPage = () => {
           <h1 className="text-2xl font-bold">Categorias</h1>
           <p className="text-muted-foreground text-sm">Organize suas transações por categorias</p>
         </div>
-        <NewCategoryDialog />
+        <NewCategoryDialog>
+          <Button size="sm">
+            <Plus />
+            Nova categoria
+          </Button>
+        </NewCategoryDialog>
       </div>
 
       <div className="grid grid-cols-3 gap-6">

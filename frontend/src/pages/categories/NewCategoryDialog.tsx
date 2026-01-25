@@ -7,7 +7,6 @@ import {
   DialogTitle,
   DialogTrigger
 } from '@/components/ui/dialog'
-import { Plus } from 'lucide-react'
 import { CategoryIcon } from '@/types'
 import { getCategoryIconName } from '@/utils/categoryIcons'
 import { CATEGORY_COLORS, CATEGORY_COLOR_NAMES } from '@/constants/colors'
@@ -22,7 +21,11 @@ import { CREATE_CATEGORY } from '@/lib/graphql/mutations/CreateCategory'
 import { DialogClose } from '@radix-ui/react-dialog'
 import { LIST_CATEGORIES } from '@/lib/graphql/queries/ListCategories'
 
-const NewCategoryDialog = () => {
+type NewCategoryDialogProps = {
+  children: React.ReactNode
+}
+
+const NewCategoryDialog = ({ children }: NewCategoryDialogProps) => {
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [selectedIcon, setSelectedIcon] = useState<CategoryIcon>(CategoryIcon.BRIEFCASE)
@@ -50,12 +53,7 @@ const NewCategoryDialog = () => {
 
   return (
     <Dialog>
-      <DialogTrigger asChild>
-        <Button size="sm">
-          <Plus />
-          Nova categoria
-        </Button>
-      </DialogTrigger>
+      <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle>Nova categoria</DialogTitle>

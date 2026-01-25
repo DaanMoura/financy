@@ -1,14 +1,11 @@
 import { CircleArrowDown, CircleArrowUp } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { TransactionType } from '@/types'
 
-interface TransactionTypeProps {
-  type: 'income' | 'outcome'
-}
-
-const TransactionType = ({ type }: TransactionTypeProps) => {
+const TransactionTypeIndicator = ({ type }: { type: TransactionType }) => {
   return (
     <div className="flex items-center gap-2">
-      {type === 'income' ? (
+      {type === TransactionType.INCOME ? (
         <CircleArrowUp className="size-4 text-brand-base" />
       ) : (
         <CircleArrowDown className="size-4 text-red-base" />
@@ -16,13 +13,13 @@ const TransactionType = ({ type }: TransactionTypeProps) => {
       <span
         className={cn(
           'text-sm font-medium',
-          type === 'income' ? 'text-green-dark' : 'text-red-dark'
+          type === TransactionType.INCOME ? 'text-green-dark' : 'text-red-dark'
         )}
       >
-        {type === 'income' ? 'Entrada' : 'Saída'}
+        {type === TransactionType.INCOME ? 'Entrada' : 'Saída'}
       </span>
     </div>
   )
 }
 
-export { TransactionType }
+export { TransactionTypeIndicator }

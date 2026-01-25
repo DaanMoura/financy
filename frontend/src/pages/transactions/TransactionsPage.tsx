@@ -2,7 +2,7 @@ import { ChevronLeft, ChevronRight, Pencil, Plus, Search, Trash } from 'lucide-r
 import { IconButton } from '@/components/custom/IconButton'
 import { PaginationButton } from '@/components/custom/PaginationButton'
 import { Tag } from '@/components/custom/Tag'
-import { TransactionType } from '@/components/custom/TransactionType'
+import { TransactionTypeIndicator } from '@/components/custom/TransactionType'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group'
@@ -13,42 +13,48 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select'
+import { LIST_TRANSACTIONS } from '@/lib/graphql/queries/ListTransactions'
+import { useQuery } from '@apollo/client/react'
 
 const TransactionsPage = () => {
-  const transactions = [
-    {
-      title: 'Desenvolvimento de Site',
-      date: '12/07/2024',
-      amount: 'R$ 12.000,00',
-      tag: 'Venda',
-      tagColor: 'bg-pink-100 text-pink-700',
-      type: 'income' as const
-    },
-    {
-      title: 'Hamburguer',
-      date: '11/07/2024',
-      amount: 'R$ 50,00',
-      tag: 'Alimentação',
-      tagColor: 'bg-blue-100 text-blue-700',
-      type: 'outcome' as const
-    },
-    {
-      title: 'Aluguel do Apartamento',
-      date: '10/07/2024',
-      amount: 'R$ 1.200,00',
-      tag: 'Casa',
-      tagColor: 'bg-yellow-100 text-yellow-700',
-      type: 'outcome' as const
-    },
-    {
-      title: 'Computador',
-      date: '09/07/2024',
-      amount: 'R$ 5.000,00',
-      tag: 'Exemplo',
-      tagColor: 'bg-neutral-gray-100 text-gray-700',
-      type: 'outcome' as const
-    }
-  ]
+  // const transactions = [
+  //   {
+  //     title: 'Desenvolvimento de Site',
+  //     date: '12/07/2024',
+  //     amount: 'R$ 12.000,00',
+  //     tag: 'Venda',
+  //     tagColor: 'bg-pink-100 text-pink-700',
+  //     type: 'income' as const
+  //   },
+  //   {
+  //     title: 'Hamburguer',
+  //     date: '11/07/2024',
+  //     amount: 'R$ 50,00',
+  //     tag: 'Alimentação',
+  //     tagColor: 'bg-blue-100 text-blue-700',
+  //     type: 'outcome' as const
+  //   },
+  //   {
+  //     title: 'Aluguel do Apartamento',
+  //     date: '10/07/2024',
+  //     amount: 'R$ 1.200,00',
+  //     tag: 'Casa',
+  //     tagColor: 'bg-yellow-100 text-yellow-700',
+  //     type: 'outcome' as const
+  //   },
+  //   {
+  //     title: 'Computador',
+  //     date: '09/07/2024',
+  //     amount: 'R$ 5.000,00',
+  //     tag: 'Exemplo',
+  //     tagColor: 'bg-neutral-gray-100 text-gray-700',
+  //     type: 'outcome' as const
+  //   }
+  // ]
+
+  const { data } = useQuery(LIST_TRANSACTIONS)
+
+  const transactions = data?.listTransactions || []
 
   return (
     <div className="space-y-6 pt-12 px-20">
@@ -123,40 +129,40 @@ const TransactionsPage = () => {
             <thead className="border-b border-gray-100 bg-gray-50/50">
               <tr>
                 <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
-                  Título
+                  Descrição
                 </th>
                 <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
-                  Valor
-                </th>
-                <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
-                  Tipo
+                  Data
                 </th>
                 <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
                   Categoria
                 </th>
                 <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
-                  Data
+                  Tipo
+                </th>
+                <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
+                  Valor
                 </th>
                 <th className="px-6 py-4 text-right text-xs font-semibold uppercase tracking-wider text-gray-500"></th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
-              {transactions.map((transaction, index) => (
-                <tr key={index} className="hover:bg-gray-50/50">
+              {transactions.map(transaction => (
+                <tr key={transaction.id} className="hover:bg-gray-50/50">
                   <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900">
-                    {transaction.title}
-                  </td>
-                  <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
-                    {transaction.amount}
-                  </td>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <TransactionType type={transaction.type} />
-                  </td>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <Tag color={transaction.tagColor}>{transaction.tag}</Tag>
+                    {transaction.description}
                   </td>
                   <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
                     {transaction.date}
+                  </td>
+                  <td className="whitespace-nowrap px-6 py-4">
+                    <Tag color={transaction.category?.color}>{transaction.category?.title}</Tag>
+                  </td>
+                  <td className="whitespace-nowrap px-6 py-4">
+                    <TransactionTypeIndicator type={transaction.type} />
+                  </td>
+                  <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
+                    {transaction.amount}
                   </td>
                   <td className="whitespace-nowrap px-6 py-4 text-right">
                     <div className="flex items-center justify-end gap-2">
