@@ -42,7 +42,7 @@ const TransactionsPage = () => {
           <CardContent className="flex gap-4 p-4">
             <div className="w-full space-y-2">
               <span className="text-sm font-medium text-gray-700">Buscar</span>
-              <InputGroup>
+              <InputGroup className="w-full">
                 <InputGroupAddon>
                   <Search className="text-gray-400" />
                 </InputGroupAddon>
@@ -50,10 +50,10 @@ const TransactionsPage = () => {
               </InputGroup>
             </div>
 
-            <div className="w-full max-w-[200px] space-y-2">
+            <div className="w-full space-y-2">
               <span className="text-sm font-medium text-gray-700">Tipo</span>
               <Select defaultValue="all">
-                <SelectTrigger>
+                <SelectTrigger className="w-full">
                   <SelectValue placeholder="Selecione" />
                 </SelectTrigger>
                 <SelectContent>
@@ -64,10 +64,10 @@ const TransactionsPage = () => {
               </Select>
             </div>
 
-            <div className="w-full max-w-[200px] space-y-2">
+            <div className="w-full space-y-2">
               <span className="text-sm font-medium text-gray-700">Categoria</span>
               <Select defaultValue="all">
-                <SelectTrigger>
+                <SelectTrigger className="w-full">
                   <SelectValue placeholder="Selecione" />
                 </SelectTrigger>
                 <SelectContent>
@@ -76,10 +76,10 @@ const TransactionsPage = () => {
               </Select>
             </div>
 
-            <div className="w-full max-w-[200px] space-y-2">
+            <div className="w-full space-y-2">
               <span className="text-sm font-medium text-gray-700">Período</span>
               <Select defaultValue="nov_2025">
-                <SelectTrigger>
+                <SelectTrigger className="w-full">
                   <SelectValue placeholder="Selecione" />
                 </SelectTrigger>
                 <SelectContent>
