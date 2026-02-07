@@ -10,7 +10,7 @@ import { CreateTransactionInput, UpdateTransactionInput } from '../dtos/input/tr
 import { GqlUser } from '../graphql/decorators/user.decorator'
 import { User } from '@prisma/client'
 
-@Resolver(() => CategoryModel)
+@Resolver(() => TransactionModel)
 @UseMiddleware(IsAuth)
 export class TransactionResolver {
   private transactionService = new TransactionService()
@@ -58,6 +58,7 @@ export class TransactionResolver {
     @Root() transaction: TransactionModel,
     @GqlUser() user: User
   ): Promise<CategoryModel> {
+    console.log('transaction.category field resolver')
     return this.categoryService.findCategoryById(transaction.categoryId, user.id)
   }
 }

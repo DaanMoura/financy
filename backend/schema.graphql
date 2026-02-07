@@ -23,7 +23,6 @@ enum CategoryIcon {
 }
 
 type CategoryModel {
-  category: CategoryModel!
   color: String!
   createdAt: DateTimeISO!
   description: String

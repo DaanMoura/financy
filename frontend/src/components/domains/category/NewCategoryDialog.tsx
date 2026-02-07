@@ -7,9 +7,9 @@ import {
   DialogTitle,
   DialogTrigger
 } from '@/components/ui/dialog'
-import { CategoryIcon } from '@/types'
+import { CategoryIcon, type CategoryColorName } from '@/types'
 import { getCategoryIconName } from '@/utils/categoryIcons'
-import { CATEGORY_COLORS, CATEGORY_COLOR_NAMES } from '@/constants/colors'
+import { CATEGORY_COLOR_NAMES, categoryColors } from '@/constants/colors'
 import { DynamicIcon } from 'lucide-react/dynamic'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -29,7 +29,7 @@ const NewCategoryDialog = ({ children }: NewCategoryDialogProps) => {
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [selectedIcon, setSelectedIcon] = useState<CategoryIcon>(CategoryIcon.BRIEFCASE)
-  const [selectedColor, setSelectedColor] = useState('green')
+  const [selectedColor, setSelectedColor] = useState<CategoryColorName>('green')
 
   const icons = Object.values(CategoryIcon)
 
@@ -107,7 +107,7 @@ const NewCategoryDialog = ({ children }: NewCategoryDialogProps) => {
           </div>
 
           <div className="space-y-2">
-            <Label>Cor</Label>
+            <Label>Cor {categoryColors[selectedColor].base}</Label>
             <div className="flex gap-4">
               {CATEGORY_COLOR_NAMES.map(color => (
                 <button
@@ -116,10 +116,10 @@ const NewCategoryDialog = ({ children }: NewCategoryDialogProps) => {
                   onClick={() => setSelectedColor(color)}
                   className={cn(
                     'h-5 w-10 rounded transition-all cursor-pointer',
-                    `bg-${CATEGORY_COLORS[color].base}`,
                     `ring-1 ring-offset-4 ${selectedColor === color ? `ring-brand-base` : 'ring-gray-300'}`,
                     `hover:ring-brand-base`
                   )}
+                  style={{ backgroundColor: `var(--color-${categoryColors[color].base})` }}
                 />
               ))}
             </div>

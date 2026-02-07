@@ -63,15 +63,20 @@ export class CategoryService {
   }
 
   async findCategoryById(id: string, userId: string) {
+    console.log('findCategoryById', id)
     const category = await prismaClient.category.findUnique({
       where: { id }
     })
 
+    console.log('category response', category)
+
     if (!category) {
+      console.log('ERROR: category not found')
       throw new Error('Category not found')
     }
 
     if (category.userId !== userId) {
+      console.log('ERROR: user not authorized')
       throw new Error('User is not authorized to access category of another user')
     }
 

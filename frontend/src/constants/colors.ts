@@ -1,3 +1,4 @@
+import type { CategoryColorName } from "@/types"
 
 type Color = {
   base: string
@@ -5,15 +6,17 @@ type Color = {
   light: string
 }
 
-export const CATEGORY_COLOR_NAMES = ['green', 'blue', 'purple', 'pink', 'red', 'orange', 'yellow']
+export const CATEGORY_COLOR_NAMES = ['green', 'blue', 'purple', 'pink', 'red', 'orange', 'yellow'] as const
 
-const _categoryColors: Record<string, Color> = {} 
+
+
+
+export const categoryColors: Record<CategoryColorName, Color> = {} as Record<CategoryColorName, Color>
 CATEGORY_COLOR_NAMES.forEach(color => {
-  _categoryColors[color] = {
+  categoryColors[color] = {
     base: `${color}-base`,
     dark: `${color}-dark`,
     light: `${color}-light`
   }
 })
 
-export const CATEGORY_COLORS = _categoryColors

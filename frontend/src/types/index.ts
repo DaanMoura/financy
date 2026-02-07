@@ -1,3 +1,7 @@
+import type { CATEGORY_COLOR_NAMES } from "@/constants/colors"
+
+export type CategoryColorName = typeof CATEGORY_COLOR_NAMES[number]
+
 export interface User {
   id: string
   name: string
@@ -40,7 +44,7 @@ export interface Category {
   id: string
   title: string
   description?: string | null
-  color: string
+  color: CategoryColorName
   icon: CategoryIcon
   transactions: { id: string }[]
   createdAt?: string
@@ -50,7 +54,7 @@ export interface Category {
 export interface CreateCategoryInput {
   title: string
   description?: string
-  color: string
+  color: CategoryColorName
   icon: CategoryIcon
 }
 

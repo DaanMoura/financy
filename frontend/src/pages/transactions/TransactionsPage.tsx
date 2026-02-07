@@ -13,14 +13,109 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select'
+import { LIST_CATEGORIES_SELECT } from '@/lib/graphql/queries/ListCategories'
 import { LIST_TRANSACTIONS } from '@/lib/graphql/queries/ListTransactions'
+import { TransactionType } from '@/types'
 import { useQuery } from '@apollo/client/react'
+import { useEffect, useMemo, useState } from 'react'
 import NewTransactionDialog from '@/components/domains/transaction/NewTransactionDialog'
 
-const TransactionsPage = () => {
-  const { data } = useQuery(LIST_TRANSACTIONS)
+const ITEMS_PER_PAGE = 10
 
-  const transactions = data?.listTransactions || []
+const getPeriodDates = (period: string) => {
+  if (!period) return { start: undefined, end: undefined }
+
+  // Format: "nov_2025" or similar
+  const [monthStr, yearStr] = period.split('_')
+  if (!monthStr || !yearStr) return { start: undefined, end: undefined }
+
+  const months: Record<string, number> = {
+    jan: 0,
+    feb: 1,
+    mar: 2,
+    apr: 3,
+    may: 4,
+    jun: 5,
+    jul: 6,
+    aug: 7,
+    sep: 8,
+    oct: 9,
+    nov: 10,
+    dec: 11
+  }
+
+  const month = months[monthStr.toLowerCase()]
+  const year = parseInt(yearStr, 10)
+
+  if (month === undefined || isNaN(year)) return { start: undefined, end: undefined }
+
+  const start = new Date(year, month, 1)
+  const end = new Date(year, month + 1, 0, 23, 59, 59, 999)
+
+  return { start, end }
+}
+
+const TransactionsPage = () => {
+  /* ... inside TransactionsPage ... */
+  const [page, setPage] = useState(1)
+  const [searchTerm, setSearchTerm] = useState('')
+  const [selectedType, setSelectedType] = useState<TransactionType | 'all'>('all')
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string>('all')
+  const [selectedPeriod, setSelectedPeriod] = useState('nov_2025')
+
+  // Reset page on filter change
+  useEffect(() => {
+    setPage(1)
+  }, [searchTerm, selectedType, selectedCategoryId, selectedPeriod])
+
+  const { data: categoriesData } = useQuery(LIST_CATEGORIES_SELECT)
+  const categories = categoriesData?.listCategories || []
+
+  const { data, loading } = useQuery(LIST_TRANSACTIONS, {
+    fetchPolicy: 'cache-and-network'
+  })
+
+  const allTransactions = data?.listTransactions || []
+
+  const filteredTransactions = useMemo(() => {
+    let result = allTransactions
+
+    // Filter by search
+    if (searchTerm) {
+      result = result.filter(t => t.description.toLowerCase().includes(searchTerm.toLowerCase()))
+    }
+
+    // Filter by type
+    if (selectedType !== 'all') {
+      result = result.filter(t => t.type === selectedType)
+    }
+
+    // Filter by category
+    if (selectedCategoryId !== 'all') {
+      result = result.filter(t => t.categoryId === selectedCategoryId)
+    }
+
+    // // Filter by period
+    // if (selectedPeriod) {
+    //   const { start, end } = getPeriodDates(selectedPeriod)
+    //   if (start && end) {
+    //     result = result.filter(t => {
+    //       const date = new Date(t.date)
+    //       return date >= start && date <= end
+    //     })
+    //   }
+    // }
+
+    return result
+  }, [allTransactions, searchTerm, selectedType, selectedCategoryId, selectedPeriod])
+
+  const totalPages = Math.ceil(filteredTransactions.length / ITEMS_PER_PAGE) || 1
+  const paginatedTransactions = filteredTransactions.slice(
+    (page - 1) * ITEMS_PER_PAGE,
+    page * ITEMS_PER_PAGE
+  )
+
+  const hasMore = page < totalPages
 
   return (
     <div className="space-y-6 pt-12 px-20">
@@ -46,39 +141,51 @@ const TransactionsPage = () => {
                 <InputGroupAddon>
                   <Search className="text-gray-400" />
                 </InputGroupAddon>
-                <InputGroupInput placeholder="Buscar por descrição" />
+                <InputGroupInput
+                  placeholder="Buscar por descrição"
+                  value={searchTerm}
+                  onChange={e => setSearchTerm(e.target.value)}
+                />
               </InputGroup>
             </div>
 
             <div className="w-full space-y-2">
               <span className="text-sm font-medium text-gray-700">Tipo</span>
-              <Select defaultValue="all">
+              <Select
+                value={selectedType}
+                onValueChange={val => setSelectedType(val as TransactionType | 'all')}
+              >
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Selecione" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">Todos</SelectItem>
-                  <SelectItem value="income">Entrada</SelectItem>
-                  <SelectItem value="outcome">Saída</SelectItem>
+                  <SelectItem value={TransactionType.INCOME}>Entrada</SelectItem>
+                  <SelectItem value={TransactionType.EXPENSE}>Saída</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
             <div className="w-full space-y-2">
               <span className="text-sm font-medium text-gray-700">Categoria</span>
-              <Select defaultValue="all">
+              <Select value={selectedCategoryId} onValueChange={val => setSelectedCategoryId(val)}>
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Selecione" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">Todas</SelectItem>
+                  {categories.map(category => (
+                    <SelectItem key={category.id} value={category.id}>
+                      {category.title}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
 
             <div className="w-full space-y-2">
               <span className="text-sm font-medium text-gray-700">Período</span>
-              <Select defaultValue="nov_2025">
+              <Select value={selectedPeriod} onValueChange={setSelectedPeriod}>
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Selecione" />
                 </SelectTrigger>
@@ -115,45 +222,75 @@ const TransactionsPage = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
-              {transactions.map(transaction => (
-                <tr key={transaction.id} className="hover:bg-gray-50/50">
-                  <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900">
-                    {transaction.description}
-                  </td>
-                  <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
-                    {transaction.date}
-                  </td>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <Tag color={transaction.category?.color}>{transaction.category?.title}</Tag>
-                  </td>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <TransactionTypeIndicator type={transaction.type} />
-                  </td>
-                  <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
-                    {transaction.amount}
-                  </td>
-                  <td className="whitespace-nowrap px-6 py-4 text-right">
-                    <div className="flex items-center justify-end gap-2">
-                      <IconButton icon={<Pencil />} />
-                      <IconButton icon={<Trash />} />
-                    </div>
+              {loading && allTransactions.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="text-center py-8 text-gray-500">
+                    Carregando...
                   </td>
                 </tr>
-              ))}
+              ) : paginatedTransactions.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="text-center py-8 text-gray-500">
+                    Nenhuma transação encontrada
+                  </td>
+                </tr>
+              ) : (
+                paginatedTransactions.map(transaction => (
+                  <tr key={transaction.id} className="hover:bg-gray-50/50">
+                    <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900">
+                      {transaction.description}
+                    </td>
+                    <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
+                      {new Date(transaction.date).toLocaleDateString('pt-BR')}
+                    </td>
+                    <td className="whitespace-nowrap px-6 py-4">
+                      {transaction.category && (
+                        <Tag color={transaction.category.color}>{transaction.category.title}</Tag>
+                      )}
+                    </td>
+                    <td className="whitespace-nowrap px-6 py-4">
+                      <TransactionTypeIndicator type={transaction.type} />
+                    </td>
+                    <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
+                      {new Intl.NumberFormat('pt-BR', {
+                        style: 'currency',
+                        currency: 'BRL'
+                      }).format(transaction.amount)}
+                    </td>
+                    <td className="whitespace-nowrap px-6 py-4 text-right">
+                      <div className="flex items-center justify-end gap-2">
+                        <IconButton icon={<Pencil />} />
+                        <IconButton icon={<Trash />} />
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
 
           <div className="flex items-center justify-between border-t border-gray-100 px-6 py-4">
-            <Button variant="outline" className="gap-2" disabled>
+            <Button
+              variant="outline"
+              className="gap-2"
+              disabled={page === 1 || loading}
+              onClick={() => setPage(p => Math.max(1, p - 1))}
+            >
               <ChevronLeft className="size-4" />
               Anterior
             </Button>
             <div className="flex items-center gap-2">
-              <PaginationButton isActive>1</PaginationButton>
-              <PaginationButton>2</PaginationButton>
-              <PaginationButton>3</PaginationButton>
+              <PaginationButton isActive>{page}</PaginationButton>
+              {hasMore && (
+                <PaginationButton onClick={() => setPage(p => p + 1)}>{page + 1}</PaginationButton>
+              )}
             </div>
-            <Button variant="outline" className="gap-2">
+            <Button
+              variant="outline"
+              className="gap-2"
+              disabled={!hasMore || loading}
+              onClick={() => setPage(p => p + 1)}
+            >
               Próxima
               <ChevronRight className="size-4" />
             </Button>
