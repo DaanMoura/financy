@@ -36,6 +36,8 @@ export const LIST_TRANSACTIONS: TypedDocumentNode<
       category {
         id
         title
+        icon
+        color
       }
       createdAt
       updatedAt

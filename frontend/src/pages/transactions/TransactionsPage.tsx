@@ -1,18 +1,11 @@
-import { ChevronLeft, ChevronRight, Pencil, Plus, Search, Trash } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Pencil, Plus, Trash } from 'lucide-react'
 import { IconButton } from '@/components/custom/IconButton'
 import { PaginationButton } from '@/components/custom/PaginationButton'
 import { Tag } from '@/components/custom/Tag'
 import { TransactionTypeIndicator } from '@/components/domains/transaction/TransactionType'
+import { TransactionsFilters } from '@/components/domains/transaction/TransactionsFilters'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from '@/components/ui/select'
 import { LIST_CATEGORIES_SELECT } from '@/lib/graphql/queries/ListCategories'
 import { LIST_TRANSACTIONS } from '@/lib/graphql/queries/ListTransactions'
 import { TransactionType } from '@/types'
@@ -61,9 +54,10 @@ const TransactionsPage = () => {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedType, setSelectedType] = useState<TransactionType | 'all'>('all')
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>('all')
-  const [selectedPeriod, setSelectedPeriod] = useState('nov_2025')
+  const [selectedPeriod, setSelectedPeriod] = useState<string>('all')
 
   // Reset page on filter change
+  // biome-ignore lint/correctness/useExhaustiveDependencies: it needs to react when any filter changes
   useEffect(() => {
     setPage(1)
   }, [searchTerm, selectedType, selectedCategoryId, selectedPeriod])
@@ -95,19 +89,34 @@ const TransactionsPage = () => {
       result = result.filter(t => t.categoryId === selectedCategoryId)
     }
 
-    // // Filter by period
-    // if (selectedPeriod) {
-    //   const { start, end } = getPeriodDates(selectedPeriod)
-    //   if (start && end) {
-    //     result = result.filter(t => {
-    //       const date = new Date(t.date)
-    //       return date >= start && date <= end
-    //     })
-    //   }
-    // }
+    // Filter by period
+    if (selectedPeriod && selectedPeriod !== 'all') {
+      const { start, end } = getPeriodDates(selectedPeriod)
+      if (start && end) {
+        result = result.filter(t => {
+          const date = new Date(t.date)
+          return date >= start && date <= end
+        })
+      }
+    }
 
     return result
   }, [allTransactions, searchTerm, selectedType, selectedCategoryId, selectedPeriod])
+
+  const months = useMemo(() => {
+    const _months: Set<string> = new Set()
+    allTransactions.forEach(t => {
+      const date = new Date(t.date)
+      const month = date.getMonth()
+      const year = date.getFullYear()
+      _months.add(`${month}_${year}`)
+    })
+    return Array.from(_months).map(m => {
+      const [month, year] = m.split('_')
+      const date = new Date(parseInt(year), parseInt(month))
+      return { value: m, label: date.toLocaleString('pt-BR', { month: 'short', year: 'numeric' }) }
+    })
+  }, [allTransactions])
 
   const totalPages = Math.ceil(filteredTransactions.length / ITEMS_PER_PAGE) || 1
   const paginatedTransactions = filteredTransactions.slice(
@@ -132,71 +141,18 @@ const TransactionsPage = () => {
         </NewTransactionDialog>
       </div>
 
-      <div className="grid gap-6">
-        <Card>
-          <CardContent className="flex gap-4 p-4">
-            <div className="w-full space-y-2">
-              <span className="text-sm font-medium text-gray-700">Buscar</span>
-              <InputGroup className="w-full">
-                <InputGroupAddon>
-                  <Search className="text-gray-400" />
-                </InputGroupAddon>
-                <InputGroupInput
-                  placeholder="Buscar por descrição"
-                  value={searchTerm}
-                  onChange={e => setSearchTerm(e.target.value)}
-                />
-              </InputGroup>
-            </div>
-
-            <div className="w-full space-y-2">
-              <span className="text-sm font-medium text-gray-700">Tipo</span>
-              <Select
-                value={selectedType}
-                onValueChange={val => setSelectedType(val as TransactionType | 'all')}
-              >
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Selecione" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">Todos</SelectItem>
-                  <SelectItem value={TransactionType.INCOME}>Entrada</SelectItem>
-                  <SelectItem value={TransactionType.EXPENSE}>Saída</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="w-full space-y-2">
-              <span className="text-sm font-medium text-gray-700">Categoria</span>
-              <Select value={selectedCategoryId} onValueChange={val => setSelectedCategoryId(val)}>
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Selecione" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">Todas</SelectItem>
-                  {categories.map(category => (
-                    <SelectItem key={category.id} value={category.id}>
-                      {category.title}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="w-full space-y-2">
-              <span className="text-sm font-medium text-gray-700">Período</span>
-              <Select value={selectedPeriod} onValueChange={setSelectedPeriod}>
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Selecione" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="nov_2025">Novembro / 2025</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+      <TransactionsFilters
+        searchTerm={searchTerm}
+        onSearchChange={setSearchTerm}
+        selectedType={selectedType}
+        onTypeChange={val => setSelectedType(val as TransactionType | 'all')}
+        selectedCategoryId={selectedCategoryId}
+        onCategoryChange={setSelectedCategoryId}
+        selectedPeriod={selectedPeriod}
+        onPeriodChange={setSelectedPeriod}
+        months={months}
+        categories={categories}
+      />
 
       <Card>
         <CardContent className="p-0">
