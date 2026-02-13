@@ -11,7 +11,7 @@ import { LIST_TRANSACTIONS } from '@/lib/graphql/queries/ListTransactions'
 import { TransactionType } from '@/types'
 import { useQuery } from '@apollo/client/react'
 import { useEffect, useMemo, useState } from 'react'
-import NewTransactionDialog from '@/components/domains/transaction/NewTransactionDialog'
+import { NewTransactionDialog } from '@/components/domains/transaction'
 
 const ITEMS_PER_PAGE = 10
 

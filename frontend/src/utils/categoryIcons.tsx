@@ -1,7 +1,9 @@
 import { CategoryIcon } from '@/types'
 import type { IconName } from 'lucide-react/dynamic'
 
-export const getCategoryIconName = (icon: CategoryIcon): IconName => {
+export const getCategoryIconName = (icon: CategoryIcon | undefined): IconName => {
+  if (!icon) return 'utensils'
+
   switch (icon) {
     case CategoryIcon.FOOD:
       return 'utensils'

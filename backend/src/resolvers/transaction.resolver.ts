@@ -58,7 +58,6 @@ export class TransactionResolver {
     @Root() transaction: TransactionModel,
     @GqlUser() user: User
   ): Promise<CategoryModel> {
-    console.log('transaction.category field resolver')
     return this.categoryService.findCategoryById(transaction.categoryId, user.id)
   }
 }

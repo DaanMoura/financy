@@ -1,7 +1,7 @@
 import { Arg, Mutation, Query, Resolver, UseMiddleware } from 'type-graphql'
 import { UserModel } from '../models/user.model'
 import { UserService } from '../services/user.service'
-import { CreateUserInput } from '../dtos/input/user.input'
+import { CreateUserInput, UpdateUserInput } from '../dtos/input/user.input'
 import { IsAuth } from '../middlewares/auth.middleware'
 
 @Resolver(() => UserModel)
@@ -12,6 +12,11 @@ export class UserResolver {
   @Mutation(() => UserModel)
   async createUser(@Arg('data', () => CreateUserInput) data: CreateUserInput): Promise<UserModel> {
     return this.userService.createUser(data)
+  }
+
+  @Mutation(() => UserModel)
+  async updateUser(@Arg('id', () => String) id: string, @Arg('data', () => UpdateUserInput) data: UpdateUserInput): Promise<UserModel> {
+    return this.userService.updateUser(id, data)
   }
 
   @Query(() => UserModel)

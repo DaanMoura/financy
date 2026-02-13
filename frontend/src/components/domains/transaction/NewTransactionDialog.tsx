@@ -30,7 +30,7 @@ type NewTransactionDialogProps = {
   children: React.ReactNode
 }
 
-const NewTransactionDialog = ({ children }: NewTransactionDialogProps) => {
+export const NewTransactionDialog = ({ children }: NewTransactionDialogProps) => {
   const [type, setType] = useState<TransactionType>(TransactionType.EXPENSE)
   const [description, setDescription] = useState('')
   const [amount, setAmount] = useState('')
@@ -164,5 +164,3 @@ const NewTransactionDialog = ({ children }: NewTransactionDialogProps) => {
     </Dialog>
   )
 }
-
-export default NewTransactionDialog
