@@ -25,6 +25,7 @@ import { useMutation, useQuery } from '@apollo/client/react'
 import { LIST_CATEGORIES_SELECT } from '@/lib/graphql/queries/ListCategories'
 import { CREATE_TRANSACTION } from '@/lib/graphql/mutations/CreateTransaction'
 import { LIST_TRANSACTIONS } from '@/lib/graphql/queries/ListTransactions'
+import { GET_SUMMARY } from '@/lib/graphql/queries/GetSummary'
 
 type NewTransactionDialogProps = {
   children: React.ReactNode
@@ -41,7 +42,7 @@ export const NewTransactionDialog = ({ children }: NewTransactionDialogProps) =>
   const categoryOptions = data?.listCategories ?? []
 
   const [createTransaction] = useMutation(CREATE_TRANSACTION, {
-    refetchQueries: [LIST_TRANSACTIONS]
+    refetchQueries: [LIST_TRANSACTIONS, GET_SUMMARY]
   })
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {

@@ -9,16 +9,18 @@ import {
   CardHeader,
   CardTitle
 } from '@/components/ui/card'
-import { LIST_CATEGORIES } from '@/lib/graphql/queries/ListCategories'
+import { LIST_CATEGORIES, LIST_CATEGORIES_SELECT } from '@/lib/graphql/queries/ListCategories'
 import { CategoryIcon } from '@/types'
 import { getCategoryIconName } from '@/utils/categoryIcons'
-import { useQuery } from '@apollo/client/react'
+import { useMutation, useQuery } from '@apollo/client/react'
 import { ArrowUpDown, SquarePen, TagIcon, Trash, Plus } from 'lucide-react'
 import { useMemo } from 'react'
 import { DynamicIcon } from 'lucide-react/dynamic'
 import NewCategoryDialog from '../../components/domains/category/NewCategoryDialog'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
+import { DELETE_CATEGORY } from '@/lib/graphql/mutations/DeleteCategory'
+import { GET_SUMMARY } from '@/lib/graphql/queries/GetSummary'
 
 const CategoriesPage = () => {
   const { data } = useQuery(LIST_CATEGORIES)
@@ -35,6 +37,14 @@ const CategoriesPage = () => {
       return prev.transactions.length > current.transactions.length ? prev : current
     })
   }, [categories])
+
+  const [deleteCategory] = useMutation(DELETE_CATEGORY, {
+    refetchQueries: [LIST_CATEGORIES, LIST_CATEGORIES_SELECT, GET_SUMMARY]
+  })
+
+  const handleDelete = (id: string) => {
+    deleteCategory({ variables: { id } })
+  }
 
   return (
     <div className="space-y-6">
@@ -107,7 +117,10 @@ const CategoriesPage = () => {
                   <DynamicIcon name={getCategoryIconName(category.icon)} />
                 </div>
                 <CardAction className="flex gap-2">
-                  <IconButton icon={<Trash className="text-destructive h-4 w-4" />} />
+                  <IconButton
+                    onClick={() => handleDelete(category.id)}
+                    icon={<Trash className="text-destructive h-4 w-4" />}
+                  />
                   <IconButton icon={<SquarePen className="h-4 w-4" />} />
                 </CardAction>
               </CardHeader>

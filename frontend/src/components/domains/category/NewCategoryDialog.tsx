@@ -20,6 +20,7 @@ import { useMutation } from '@apollo/client/react'
 import { CREATE_CATEGORY } from '@/lib/graphql/mutations/CreateCategory'
 import { DialogClose } from '@radix-ui/react-dialog'
 import { LIST_CATEGORIES, LIST_CATEGORIES_SELECT } from '@/lib/graphql/queries/ListCategories'
+import { GET_SUMMARY } from '@/lib/graphql/queries/GetSummary'
 
 type NewCategoryDialogProps = {
   children: React.ReactNode
@@ -34,7 +35,7 @@ const NewCategoryDialog = ({ children }: NewCategoryDialogProps) => {
   const icons = Object.values(CategoryIcon)
 
   const [createCategory] = useMutation(CREATE_CATEGORY, {
-    refetchQueries: [LIST_CATEGORIES, LIST_CATEGORIES_SELECT]
+    refetchQueries: [LIST_CATEGORIES, LIST_CATEGORIES_SELECT, GET_SUMMARY]
   })
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
