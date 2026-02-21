@@ -1,10 +1,11 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Tag } from '@/components/custom/Tag'
-import { ArrowDownCircle, ArrowUpCircle, ChevronRight, Plus, Wallet } from 'lucide-react'
+import { ArrowDownCircle, ArrowUpCircle, ChevronRight, Plus } from 'lucide-react'
 import { TransactionType, type Transaction } from '@/types'
 import { DynamicIcon } from 'lucide-react/dynamic'
 import { getCategoryIconName } from '@/utils/categoryIcons'
+import { formatCurrency } from '@/utils/currencyFormatter'
 
 type Props = {
   transactions: Transaction[]
@@ -34,7 +35,9 @@ export const RecentTransactions = ({ transactions }: Props) => {
                 </div>
                 <div>
                   <div className="font-medium text-gray-900">{item.description}</div>
-                  <div className="text-sm text-gray-500">{item.date}</div>
+                  <div className="text-sm text-gray-500">
+                    {new Date(item.date).toLocaleDateString('pt-BR')}
+                  </div>
                 </div>
               </div>
               <div className="flex items-center gap-4">
@@ -45,7 +48,7 @@ export const RecentTransactions = ({ transactions }: Props) => {
                       item.type === TransactionType.INCOME ? 'text-gray-900' : 'text-gray-900'
                     }
                   >
-                    {item.amount}
+                    {formatCurrency(item.amount)}
                   </span>
                   {item.type === TransactionType.INCOME ? (
                     <ArrowUpCircle className="h-4 w-4 text-green-500" />

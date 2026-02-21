@@ -9,9 +9,12 @@ import { Card, CardContent } from '@/components/ui/card'
 import { LIST_CATEGORIES_SELECT } from '@/lib/graphql/queries/ListCategories'
 import { LIST_TRANSACTIONS } from '@/lib/graphql/queries/ListTransactions'
 import { TransactionType } from '@/types'
-import { useQuery } from '@apollo/client/react'
+import { useMutation, useQuery } from '@apollo/client/react'
 import { useEffect, useMemo, useState } from 'react'
 import { NewTransactionDialog } from '@/components/domains/transaction'
+import { DELETE_TRANSACTION } from '@/lib/graphql/mutations/DeleteTransaction'
+import { GET_SUMMARY } from '@/lib/graphql/queries/GetSummary'
+import { formatCurrency } from '@/utils/currencyFormatter'
 
 const ITEMS_PER_PAGE = 10
 
@@ -126,6 +129,14 @@ const TransactionsPage = () => {
 
   const hasMore = page < totalPages
 
+  const [deleteTransaction] = useMutation(DELETE_TRANSACTION, {
+    refetchQueries: [LIST_TRANSACTIONS, GET_SUMMARY]
+  })
+
+  const handleDelete = (id: string) => {
+    deleteTransaction({ variables: { id } })
+  }
+
   return (
     <div className="space-y-6 pt-12 px-20">
       <div className="flex items-center justify-between">
@@ -208,15 +219,12 @@ const TransactionsPage = () => {
                       <TransactionTypeIndicator type={transaction.type} />
                     </td>
                     <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
-                      {new Intl.NumberFormat('pt-BR', {
-                        style: 'currency',
-                        currency: 'BRL'
-                      }).format(transaction.amount)}
+                      {formatCurrency(transaction.amount)}
                     </td>
                     <td className="whitespace-nowrap px-6 py-4 text-right">
                       <div className="flex items-center justify-end gap-2">
                         <IconButton icon={<Pencil />} />
-                        <IconButton icon={<Trash />} />
+                        <IconButton onClick={() => handleDelete(transaction.id)} icon={<Trash />} />
                       </div>
                     </td>
                   </tr>
