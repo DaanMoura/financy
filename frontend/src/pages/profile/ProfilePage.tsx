@@ -5,14 +5,16 @@ import { Field, FieldDescription, FieldGroup, FieldLabel } from '@/components/ui
 import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group'
 import { useAuthStore } from '@/stores/auth'
 import { useMutation } from '@tanstack/react-query'
+import { useMutation as useApolloMutation } from '@apollo/client/react'
 import { LogOut, MailIcon, UserRound } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
+import { UPDATE_USER } from '@/lib/graphql/mutations/UpdateUser'
 
 const ProfilePage = () => {
   const navigate = useNavigate()
-  const { user, logout } = useAuthStore()
+  const { user, logout, setUserName } = useAuthStore()
   const [name, setName] = useState('')
 
   useEffect(() => {
@@ -34,19 +36,14 @@ const ProfilePage = () => {
     }
   })
 
-  // Mock mutation for updating user
-  const { mutate: saveChanges, isPending: isSavePending } = useMutation({
-    mutationFn: async () => {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      // In a real app, we would call an API here
-      // updateUser({ name })
-    },
-    onSuccess: () => {
+  const [updateUserName, { loading: isUpdateLoading }] = useApolloMutation(UPDATE_USER, {
+    onCompleted: () => {
+      setUserName(name)
       toast.success('Alterações salvas com sucesso!')
     },
-    onError: () => {
+    onError: error => {
       toast.error('Falha ao salvar alterações')
+      console.error(error)
     }
   })
 
@@ -56,7 +53,8 @@ const ProfilePage = () => {
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault()
-    saveChanges()
+    if (!user) return
+    updateUserName({ variables: { id: user.id, data: { name } } })
   }
 
   if (!user) return null
@@ -112,8 +110,8 @@ const ProfilePage = () => {
             </FieldGroup>
 
             <div className="flex flex-col gap-3 pt-2">
-              <Button type="submit" disabled={isSavePending} className="w-full">
-                {isSavePending ? 'Salvando...' : 'Salvar alterações'}
+              <Button type="submit" disabled={isUpdateLoading} className="w-full">
+                {isUpdateLoading ? 'Salvando...' : 'Salvar alterações'}
               </Button>
 
               <Button

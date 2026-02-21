@@ -29,11 +29,12 @@ interface AuthState {
   signup: (data: RegisterInput) => Promise<boolean>
   login: (data: LoginInput) => Promise<boolean>
   logout: () => void
+  setUserName: (name: string) => void
 }
 
 export const useAuthStore = create<AuthState>()(
   persist(
-    set => ({
+    (set, get) => ({
       user: null,
       token: null,
       refreshToken: null,
@@ -68,7 +69,7 @@ export const useAuthStore = create<AuthState>()(
           }
           return false
         } catch (error) {
-          console.log('Erro ao fazer o login')
+          console.error('Erro ao fazer o login')
           throw error
         }
       },
@@ -104,7 +105,7 @@ export const useAuthStore = create<AuthState>()(
           }
           return false
         } catch (error) {
-          console.log('Erro ao fazer o cadastro')
+          console.error('Erro ao fazer o cadastro')
           throw error
         }
       },
@@ -116,6 +117,17 @@ export const useAuthStore = create<AuthState>()(
           isAuthenticated: false
         })
         apolloClient.clearStore()
+      },
+      setUserName: (name: string) => {
+        const { user } = get()
+        if (user) {
+          set({
+            user: {
+              ...user,
+              name
+            }
+          })
+        }
       }
     }),
     {
