@@ -96,3 +96,9 @@ export interface CreateUserInput {
   name: string
   email: string
 }
+
+export interface Summary {
+  balance: number
+  monthIncome: number
+  monthExpense: number
+}

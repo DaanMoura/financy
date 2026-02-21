@@ -1,5 +1,5 @@
 import { gql, type TypedDocumentNode } from '@apollo/client'
-import type { Category } from '../../../types'
+import type { Category } from '@/types'
 
 export interface ListCategoriesQuery {
   listCategories: Pick<Category, 'id' | 'title' | 'description' | 'color' | 'icon' | 'transactions'>[]
