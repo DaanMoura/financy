@@ -9,12 +9,13 @@ import { AuthResolver } from './resolvers/auth.resolver'
 import { UserResolver } from './resolvers/user.resolver'
 import { CategoryResolver } from './resolvers/category.resolver'
 import { TransactionResolver } from './resolvers/transaction.resolver'
+import { SummaryResolver } from './resolvers/summary.resolver'
 
 async function bootstrap() {
   const app = express()
 
   const schema = await buildSchema({
-    resolvers: [AuthResolver, UserResolver, TransactionResolver, CategoryResolver],
+    resolvers: [AuthResolver, UserResolver, TransactionResolver, CategoryResolver, SummaryResolver],
     validate: false,
     emitSchemaFile: 'schema.graphql'
   })

@@ -98,7 +98,7 @@ export interface CreateUserInput {
 }
 
 export interface Summary {
-  balance: number
-  monthIncome: number
-  monthExpense: number
+  totalBalance: number
+  monthlyIncome: number
+  monthlyExpense: number
 }

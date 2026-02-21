@@ -13,6 +13,7 @@ export interface ListTransactionsQuery {
       | 'categoryId'
       | 'createdAt'
       | 'updatedAt'
+      | 'userId'
     > & {
       category: Pick<Category, 'id' | 'title' | 'color' | 'icon'> | null
     }

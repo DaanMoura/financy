@@ -85,6 +85,7 @@ type Mutation {
 }
 
 type Query {
+  getSummary: SummaryModel!
   getUser(id: String!): UserModel!
   listCategories: [CategoryModel!]!
   listTransactions: [TransactionModel!]!
@@ -100,6 +101,12 @@ type RegisterOutput {
   refreshToken: String!
   token: String!
   user: UserModel!
+}
+
+type SummaryModel {
+  monthlyExpense: Float!
+  monthlyIncome: Float!
+  totalBalance: Float!
 }
 
 type TransactionModel {
