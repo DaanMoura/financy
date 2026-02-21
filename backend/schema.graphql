@@ -78,6 +78,7 @@ type Mutation {
   deleteCategory(id: String!): Boolean!
   deleteTransaction(id: String!): Boolean!
   login(data: LoginInput!): LoginOutput!
+  refreshToken(refreshToken: String!): LoginOutput!
   register(data: RegisterInput!): RegisterOutput!
   updateCategory(data: UpdateCategoryInput!, id: String!): CategoryModel!
   updateUser(data: UpdateUserInput!, id: String!): UserModel!

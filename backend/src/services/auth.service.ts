@@ -1,7 +1,7 @@
 import { LoginInput, RegisterInput } from '../dtos/input/auth.input'
 import { prismaClient } from '../client/prisma'
 import { comparePasswords, hashPassword } from '../utils/hash'
-import { signJwt } from '../utils/jwt'
+import { signJwt, verifyJwt } from '../utils/jwt'
 import { UserModel } from '../models/user.model'
 
 export class AuthService {
@@ -45,7 +45,24 @@ export class AuthService {
 
   generateTokens(user: UserModel) {
     const token = signJwt({ id: user.id, email: user.email }, '15m')
-    const refreshToken = signJwt({ id: user.id, email: user.email }, '1d')
+    const refreshToken = signJwt({ id: user.id, email: user.email }, '7d')
     return { token, refreshToken, user }
+  }
+
+  async refreshToken(token: string) {
+    try {
+      const decoded = verifyJwt(token)
+      const user = await prismaClient.user.findUnique({
+        where: {
+          id: decoded.id
+        }
+      })
+
+      if (!user) throw new Error('User not found')
+
+      return this.generateTokens(user)
+    } catch (error) {
+      throw new Error('Invalid Refresh Token')
+    }
   }
 }

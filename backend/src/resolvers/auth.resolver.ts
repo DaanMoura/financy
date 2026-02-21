@@ -16,4 +16,9 @@ export class AuthResolver {
   async register(@Arg('data', () => RegisterInput) data: RegisterInput): Promise<RegisterOutput> {
     return this.authService.register(data)
   }
+
+  @Mutation(() => LoginOutput)
+  async refreshToken(@Arg('refreshToken', () => String) refreshToken: string): Promise<LoginOutput> {
+    return this.authService.refreshToken(refreshToken)
+  }
 }
