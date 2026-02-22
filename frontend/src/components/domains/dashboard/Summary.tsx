@@ -13,7 +13,7 @@ export const Summary = ({ balance, monthIncome, monthExpense }: Props) => {
     <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
       <Card>
         <CardContent className="flex flex-col gap-2 px-6">
-          <div className="flex items-center gap-2 text-sm font-medium text-gray-500">
+          <div className="flex items-center gap-2 text-xs font-medium text-gray-500">
             <Wallet className="h-4 w-4 text-purple-500" />
             SALDO TOTAL
           </div>
@@ -22,8 +22,8 @@ export const Summary = ({ balance, monthIncome, monthExpense }: Props) => {
       </Card>
       <Card>
         <CardContent className="flex flex-col gap-2 px-6">
-          <div className="flex items-center gap-2 text-sm font-medium text-gray-500">
-            <ArrowUpCircle className="h-4 w-4 text-green-500" />
+          <div className="flex items-center gap-2 text-xs font-medium text-gray-500">
+            <ArrowUpCircle className="h-4 w-4 text-brand-base" />
             RECEITAS DO MÊS
           </div>
           <div className="text-3xl font-bold text-gray-900">{formatCurrency(monthIncome)}</div>
@@ -31,8 +31,8 @@ export const Summary = ({ balance, monthIncome, monthExpense }: Props) => {
       </Card>
       <Card>
         <CardContent className="flex flex-col gap-2 px-6">
-          <div className="flex items-center gap-2 text-sm font-medium text-gray-500">
-            <ArrowDownCircle className="h-4 w-4 text-red-500" />
+          <div className="flex items-center gap-2 text-xs font-medium text-gray-500">
+            <ArrowDownCircle className="h-4 w-4 text-red-base" />
             DESPESAS DO MÊS
           </div>
           <div className="text-3xl font-bold text-gray-900">{formatCurrency(monthExpense)}</div>

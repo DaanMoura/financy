@@ -16,22 +16,22 @@ type Props = {
 
 export const RecentTransactions = ({ transactions }: Props) => {
   return (
-    <Card className="h-full">
-      <CardHeader className="flex flex-row items-center justify-between border-b border-gray-100 pb-4">
-        <CardTitle className="text-xs font-bold tracking-wider text-gray-500 uppercase">
+    <Card className="gap-0 pb-0">
+      <CardHeader className="flex flex-row items-center justify-between border-b border-gray-200">
+        <CardTitle className="text-xs font-medium tracking-wider text-gray-500 uppercase">
           Transações Recentes
         </CardTitle>
         <Link to="/transactions">
           <Button
             variant="link"
-            className="h-auto p-0 text-sm font-medium text-green-600 hover:no-underline"
+            className="h-auto p-0 text-sm font-medium text-brand-base hover:underline"
           >
             Ver todas <ChevronRight className="ml-1 h-4 w-4" />
           </Button>
         </Link>
       </CardHeader>
-      <CardContent className="p-0">
-        <div className="divide-y divide-gray-100">
+      <CardContent className="p-0 m-0">
+        <div className="divide-y divide-gray-200">
           {transactions.map((item, index) => (
             <div key={index} className="flex items-center justify-between p-4 hover:bg-gray-50">
               <div className="flex items-center gap-4">
@@ -55,22 +55,22 @@ export const RecentTransactions = ({ transactions }: Props) => {
                     {formatCurrency(item.amount)}
                   </span>
                   {item.type === TransactionType.INCOME ? (
-                    <ArrowUpCircle className="h-4 w-4 text-green-500" />
+                    <ArrowUpCircle className="h-4 w-4 text-brand-base" />
                   ) : (
-                    <ArrowDownCircle className="h-4 w-4 text-red-500" />
+                    <ArrowDownCircle className="h-4 w-4 text-red-base" />
                   )}
                 </div>
               </div>
             </div>
           ))}
         </div>
-        <div className="border-t border-gray-100 p-4">
+        <div className="border-t border-gray-200 p-1">
           <TransactionDialog>
             <Button
               variant="ghost"
-              className="w-full justify-center text-green-600 hover:bg-green-50 hover:text-green-700"
+              className="w-full justify-center text-brand-base hover:underline hover:text-brand-base hover:bg-transparent"
             >
-              <Plus className="mr-2 h-4 w-4" /> Nova transação
+              <Plus className="h-4 w-4" /> Nova transação
             </Button>
           </TransactionDialog>
         </div>
