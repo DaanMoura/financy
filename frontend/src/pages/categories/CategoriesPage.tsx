@@ -10,7 +10,7 @@ import {
   CardTitle
 } from '@/components/ui/card'
 import { LIST_CATEGORIES, LIST_CATEGORIES_SELECT } from '@/lib/graphql/queries/ListCategories'
-import { CategoryIcon } from '@/types'
+import { getCategoryIconName } from '@/utils/categoryIcons'
 import { useMutation, useQuery } from '@apollo/client/react'
 import { ArrowUpDown, SquarePen, TagIcon, Trash, Plus } from 'lucide-react'
 import { useMemo } from 'react'
@@ -20,6 +20,8 @@ import { CategoryIconBadge } from '@/components/domains/category'
 import { Button } from '@/components/ui/button'
 import { DELETE_CATEGORY } from '@/lib/graphql/mutations/DeleteCategory'
 import { GET_SUMMARY } from '@/lib/graphql/queries/GetSummary'
+import { getCategoryColor } from '@/utils/categoryColors'
+import { DynamicIcon } from 'lucide-react/dynamic'
 
 const CategoriesPage = () => {
   const { data } = useQuery(LIST_CATEGORIES)
@@ -61,9 +63,9 @@ const CategoriesPage = () => {
       </div>
 
       <div className="grid grid-cols-3 gap-6">
-        <Card className="flex flex-row items-center gap-4 p-6">
-          <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-neutral-white p-2.5">
-            <TagIcon className="h-6 w-6" />
+        <Card className="flex flex-row gap-4 p-6">
+          <div className="p-1">
+            <TagIcon size={24} />
           </div>
           <div>
             <h2 className="text-2xl font-bold">{categoriesCount}</h2>
@@ -72,9 +74,9 @@ const CategoriesPage = () => {
             </p>
           </div>
         </Card>
-        <Card className="flex flex-row items-center gap-4 p-6">
-          <div className="flex h-12 w-12 items-center justify-center p-2.5 text-purple-600">
-            <ArrowUpDown className="h-6 w-6" />
+        <Card className="flex flex-row gap-4 p-6">
+          <div className="p-1 text-purple-600">
+            <ArrowUpDown size={24} />
           </div>
           <div>
             <h2 className="text-2xl font-bold">{transactionsCount}</h2>
@@ -83,12 +85,10 @@ const CategoriesPage = () => {
             </p>
           </div>
         </Card>
-        <Card className="flex flex-row items-center gap-4 p-6">
-          <CategoryIconBadge
-            color={mostUsedCategory?.color}
-            icon={mostUsedCategory?.icon ?? CategoryIcon.HOME}
-            className="h-12 w-12"
-          />
+        <Card className="flex flex-row gap-4 p-6">
+          <div className={`p-1 ${getCategoryColor(mostUsedCategory?.color).text}`}>
+            <DynamicIcon name={getCategoryIconName(mostUsedCategory?.icon)} size={24} />
+          </div>
           <div>
             <h2 className="text-2xl font-bold">{mostUsedCategory?.title}</h2>
             <p className="text-muted-foreground text-xs font-medium uppercase">
