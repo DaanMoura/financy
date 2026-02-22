@@ -30,6 +30,7 @@ type CategoryModel {
   id: ID!
   title: String!
   transactions: [TransactionModel!]
+  transactionsBalance: Float
   updatedAt: DateTimeISO!
   user: UserModel
   userId: String!

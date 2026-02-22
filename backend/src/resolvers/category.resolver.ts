@@ -60,4 +60,20 @@ export class CategoryResolver {
   ): Promise<TransactionModel[]> {
     return this.transactionService.listTransactionsByCategory(category.id, user.id)
   }
+
+  @FieldResolver(() => Number)
+  async transactionsBalance(
+    @Root() category: CategoryModel,
+    @GqlUser() user: User
+  ): Promise<number> {
+    const transactions = await this.transactionService.listTransactionsByCategory(category.id, user.id)
+    const balance = transactions.reduce((acc, transaction) => {
+      if (transaction.type === 'INCOME') {
+        return acc + transaction.amount
+      } else {
+        return acc - transaction.amount
+      }
+    }, 0)
+    return balance
+  }
 }

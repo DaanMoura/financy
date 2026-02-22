@@ -6,6 +6,8 @@ import { TransactionType, type Transaction } from '@/types'
 import { DynamicIcon } from 'lucide-react/dynamic'
 import { getCategoryIconName } from '@/utils/categoryIcons'
 import { formatCurrency } from '@/utils/currencyFormatter'
+import { TransactionDialog } from '../transaction'
+import { Link } from 'react-router-dom'
 
 type Props = {
   transactions: Transaction[]
@@ -18,12 +20,14 @@ export const RecentTransactions = ({ transactions }: Props) => {
         <CardTitle className="text-xs font-bold tracking-wider text-gray-500 uppercase">
           Transações Recentes
         </CardTitle>
-        <Button
-          variant="link"
-          className="h-auto p-0 text-sm font-medium text-green-600 hover:no-underline"
-        >
-          Ver todas <ChevronRight className="ml-1 h-4 w-4" />
-        </Button>
+        <Link to="/transactions">
+          <Button
+            variant="link"
+            className="h-auto p-0 text-sm font-medium text-green-600 hover:no-underline"
+          >
+            Ver todas <ChevronRight className="ml-1 h-4 w-4" />
+          </Button>
+        </Link>
       </CardHeader>
       <CardContent className="p-0">
         <div className="divide-y divide-gray-100">
@@ -61,12 +65,14 @@ export const RecentTransactions = ({ transactions }: Props) => {
           ))}
         </div>
         <div className="border-t border-gray-100 p-4">
-          <Button
-            variant="ghost"
-            className="w-full justify-center text-green-600 hover:bg-green-50 hover:text-green-700"
-          >
-            <Plus className="mr-2 h-4 w-4" /> Nova transação
-          </Button>
+          <TransactionDialog>
+            <Button
+              variant="ghost"
+              className="w-full justify-center text-green-600 hover:bg-green-50 hover:text-green-700"
+            >
+              <Plus className="mr-2 h-4 w-4" /> Nova transação
+            </Button>
+          </TransactionDialog>
         </div>
       </CardContent>
     </Card>

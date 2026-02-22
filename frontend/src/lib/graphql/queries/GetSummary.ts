@@ -1,5 +1,5 @@
-import { gql, type TypedDocumentNode } from "@apollo/client";
-import type { Summary } from "@/types";
+import { gql, type TypedDocumentNode } from '@apollo/client'
+import type { Summary } from '@/types'
 
 export interface GetSummaryQuery {
   getSummary: Pick<Summary, 'totalBalance' | 'monthlyIncome' | 'monthlyExpense'>

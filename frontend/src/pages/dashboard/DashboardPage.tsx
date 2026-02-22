@@ -1,8 +1,8 @@
 import { Summary, RecentTransactions, CategoriesCard } from '@/components/domains/dashboard'
 import { GET_SUMMARY } from '@/lib/graphql/queries/GetSummary'
 import { LIST_TRANSACTIONS } from '@/lib/graphql/queries/ListTransactions'
-import { LIST_CATEGORIES } from '@/lib/graphql/queries/ListCategories'
-import type { Transaction } from '@/types'
+import { LIST_CATEGORIES_FOR_DASHBOARD } from '@/lib/graphql/queries/ListCategories'
+import type { Category, Transaction } from '@/types'
 
 import { useQuery } from '@apollo/client/react'
 
@@ -16,7 +16,7 @@ const DashboardPage = () => {
   const { data: transactionsData } = useQuery(LIST_TRANSACTIONS)
   const recentTransactions = (transactionsData?.listTransactions.slice(0, 5) as Transaction[]) ?? []
 
-  const { data: categoriesData } = useQuery(LIST_CATEGORIES)
+  const { data: categoriesData } = useQuery(LIST_CATEGORIES_FOR_DASHBOARD)
   const categories = categoriesData?.listCategories ?? []
 
   return (
@@ -29,7 +29,7 @@ const DashboardPage = () => {
         </div>
 
         <div>
-          <CategoriesCard categories={categories} />
+          <CategoriesCard categories={categories as Category[]} />
         </div>
       </div>
     </div>

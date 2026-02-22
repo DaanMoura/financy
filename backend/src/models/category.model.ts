@@ -38,4 +38,7 @@ export class CategoryModel {
 
   @Field(() => [TransactionModel], { nullable: true })
   transactions?: TransactionModel[]
+
+  @Field(() => Number, { nullable: true })
+  transactionsBalance?: number
 }
