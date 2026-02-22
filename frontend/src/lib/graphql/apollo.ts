@@ -4,7 +4,7 @@ import { onError } from '@apollo/client/link/error'
 import { useAuthStore } from '../../stores/auth'
 
 const httpLink = new HttpLink({
-  uri: 'http://localhost:4000/graphql'
+  uri: `${import.meta.env.VITE_BACKEND_URL}/graphql`
 })
 
 const authLink = new SetContextLink(prevContext => {
@@ -47,7 +47,7 @@ const errorLink = onError(({ graphQLErrors, operation, forward }: any) => {
         isRefreshing = true
 
         return new Observable(observer => {
-          fetch('http://localhost:4000/graphql', {
+          fetch(`${import.meta.env.VITE_BACKEND_URL}/graphql`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
