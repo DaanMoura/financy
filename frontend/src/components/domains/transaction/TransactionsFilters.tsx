@@ -37,11 +37,11 @@ export const TransactionsFilters = ({
 }: TransactionsFiltersProps) => {
   return (
     <div className="grid gap-6">
-      <Card>
-        <CardContent className="flex gap-4 p-4">
+      <Card className="pt-4">
+        <CardContent className="flex gap-4">
           <div className="w-full space-y-2">
             <span className="text-sm font-medium text-gray-700">Buscar</span>
-            <InputGroup className="w-full">
+            <InputGroup className="w-full mt-2">
               <InputGroupAddon>
                 <Search className="text-gray-400" />
               </InputGroupAddon>
@@ -59,7 +59,7 @@ export const TransactionsFilters = ({
               value={selectedType}
               onValueChange={val => onTypeChange(val as TransactionType | 'all')}
             >
-              <SelectTrigger className="w-full">
+              <SelectTrigger className="w-full mt-2">
                 <SelectValue placeholder="Selecione" />
               </SelectTrigger>
               <SelectContent>
@@ -73,7 +73,7 @@ export const TransactionsFilters = ({
           <div className="w-full space-y-2">
             <span className="text-sm font-medium text-gray-700">Categoria</span>
             <Select value={selectedCategoryId} onValueChange={onCategoryChange}>
-              <SelectTrigger className="w-full">
+              <SelectTrigger className="w-full mt-2">
                 <SelectValue placeholder="Selecione" />
               </SelectTrigger>
               <SelectContent>
@@ -90,7 +90,7 @@ export const TransactionsFilters = ({
           <div className="w-full space-y-2">
             <span className="text-sm font-medium text-gray-700">Período</span>
             <Select value={selectedPeriod} onValueChange={onPeriodChange}>
-              <SelectTrigger className="w-full">
+              <SelectTrigger className="w-full mt-2">
                 <SelectValue placeholder="Selecione" />
               </SelectTrigger>
               <SelectContent>

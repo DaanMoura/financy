@@ -1,4 +1,4 @@
-import { ChevronLeft, ChevronRight, Pencil, Plus, Trash } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Plus, SquarePen, Trash } from 'lucide-react'
 import { IconButton } from '@/components/custom/IconButton'
 import { PaginationButton } from '@/components/custom/PaginationButton'
 import { Tag } from '@/components/custom/Tag'
@@ -165,30 +165,32 @@ const TransactionsPage = () => {
         categories={categories}
       />
 
-      <Card>
+      <Card className="p-0 pt-1">
         <CardContent className="p-0">
           <table className="w-full">
-            <thead className="border-b border-gray-100 bg-gray-50/50">
+            <thead className="border-b border-gray-200">
               <tr>
-                <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
+                <th className="px-6 py-4 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
                   Descrição
                 </th>
-                <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
+                <th className="px-6 py-4 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
                   Data
                 </th>
-                <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
+                <th className="px-6 py-4 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
                   Categoria
                 </th>
-                <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
+                <th className="px-6 py-4 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
                   Tipo
                 </th>
-                <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
+                <th className="px-6 py-4 text-right text-xs font-medium uppercase tracking-wider text-gray-500">
                   Valor
                 </th>
-                <th className="px-6 py-4 text-right text-xs font-semibold uppercase tracking-wider text-gray-500"></th>
+                <th className="px-6 py-4 text-right text-xs font-medium uppercase tracking-wider text-gray-500">
+                  Ações
+                </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100">
+            <tbody className="divide-y divide-gray-200">
               {loading && allTransactions.length === 0 ? (
                 <tr>
                   <td colSpan={6} className="text-center py-8 text-gray-500">
@@ -204,7 +206,7 @@ const TransactionsPage = () => {
               ) : (
                 paginatedTransactions.map(transaction => (
                   <tr key={transaction.id} className="hover:bg-gray-50/50">
-                    <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900">
+                    <td className="whitespace-nowrap px-6 py-4 text-md font-medium text-gray-800">
                       {transaction.description}
                     </td>
                     <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
@@ -218,16 +220,20 @@ const TransactionsPage = () => {
                     <td className="whitespace-nowrap px-6 py-4">
                       <TransactionTypeIndicator type={transaction.type} />
                     </td>
-                    <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
+                    <td className="whitespace-nowrap px-6 py-4 text-right text-sm text-gray-800">
                       {transaction.type === TransactionType.EXPENSE ? '-' : '+'}{' '}
                       {formatCurrency(transaction.amount)}
                     </td>
                     <td className="whitespace-nowrap px-6 py-4 text-right">
                       <div className="flex items-center justify-end gap-2">
+                        <IconButton
+                          className="text-feedback-danger"
+                          onClick={() => handleDelete(transaction.id)}
+                          icon={<Trash />}
+                        />
                         <TransactionDialog transaction={transaction as Transaction}>
-                          <IconButton icon={<Pencil />} />
+                          <IconButton icon={<SquarePen />} />
                         </TransactionDialog>
-                        <IconButton onClick={() => handleDelete(transaction.id)} icon={<Trash />} />
                       </div>
                     </td>
                   </tr>
@@ -236,7 +242,7 @@ const TransactionsPage = () => {
             </tbody>
           </table>
 
-          <div className="flex items-center justify-between border-t border-gray-100 px-6 py-4">
+          <div className="flex items-center justify-between border-t border-gray-200 px-6 py-4">
             {/* Left: current range + total */}
             <span className="text-sm text-gray-500">
               {filteredTransactions.length === 0
