@@ -81,6 +81,7 @@ type Mutation {
   refreshToken(refreshToken: String!): LoginOutput!
   register(data: RegisterInput!): RegisterOutput!
   updateCategory(data: UpdateCategoryInput!, id: String!): CategoryModel!
+  updateTransaction(data: UpdateTransactionInput!, id: String!): TransactionModel!
   updateUser(data: UpdateUserInput!, id: String!): UserModel!
 }
 
@@ -133,6 +134,14 @@ input UpdateCategoryInput {
   description: String
   icon: CategoryIcon
   title: String
+}
+
+input UpdateTransactionInput {
+  amount: Int
+  categoryId: String
+  date: DateTimeISO
+  description: String
+  type: TransactionType
 }
 
 input UpdateUserInput {

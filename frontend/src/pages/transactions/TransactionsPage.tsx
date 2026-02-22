@@ -8,10 +8,10 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { LIST_CATEGORIES_SELECT } from '@/lib/graphql/queries/ListCategories'
 import { LIST_TRANSACTIONS } from '@/lib/graphql/queries/ListTransactions'
-import { TransactionType } from '@/types'
+import { TransactionType, type Transaction } from '@/types'
 import { useMutation, useQuery } from '@apollo/client/react'
 import { useEffect, useMemo, useState } from 'react'
-import { NewTransactionDialog } from '@/components/domains/transaction'
+import { TransactionDialog } from '@/components/domains/transaction'
 import { DELETE_TRANSACTION } from '@/lib/graphql/mutations/DeleteTransaction'
 import { GET_SUMMARY } from '@/lib/graphql/queries/GetSummary'
 import { formatCurrency } from '@/utils/currencyFormatter'
@@ -144,12 +144,12 @@ const TransactionsPage = () => {
           <h1 className="text-2xl font-bold text-gray-900">Transações</h1>
           <p className="text-gray-500">Gerencie todas as suas transações financeiras</p>
         </div>
-        <NewTransactionDialog>
+        <TransactionDialog>
           <Button size="sm" className="font-semibold">
             <Plus className="mr-2 h-4 w-4" />
             Nova transação
           </Button>
-        </NewTransactionDialog>
+        </TransactionDialog>
       </div>
 
       <TransactionsFilters
@@ -223,7 +223,9 @@ const TransactionsPage = () => {
                     </td>
                     <td className="whitespace-nowrap px-6 py-4 text-right">
                       <div className="flex items-center justify-end gap-2">
-                        <IconButton icon={<Pencil />} />
+                        <TransactionDialog transaction={transaction as Transaction}>
+                          <IconButton icon={<Pencil />} />
+                        </TransactionDialog>
                         <IconButton onClick={() => handleDelete(transaction.id)} icon={<Trash />} />
                       </div>
                     </td>

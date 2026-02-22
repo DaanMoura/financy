@@ -26,6 +26,7 @@ export class TransactionResolver {
     return this.transactionService.createTransaction(data, user.id)
   }
 
+  @Mutation(() => TransactionModel)
   async updateTransaction(
     @Arg('id', () => String) id: string,
     @Arg('data', () => UpdateTransactionInput) data: UpdateTransactionInput,

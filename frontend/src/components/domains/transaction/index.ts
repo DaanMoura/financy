@@ -1,3 +1,3 @@
-export * from './NewTransactionDialog'
+export * from './TransactionDialog'
 export * from './TransactionsFilters'
 export * from './TransactionType'

@@ -92,6 +92,14 @@ export interface CreateTransactionInput {
   categoryId: string
 }
 
+export interface UpdateTransactionInput {
+  description?: string
+  amount?: number
+  date?: string
+  type?: TransactionType
+  categoryId?: string
+}
+
 export interface CreateUserInput {
   name: string
   email: string

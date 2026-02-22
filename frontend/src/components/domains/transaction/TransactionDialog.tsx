@@ -7,7 +7,7 @@ import {
   DialogTitle,
   DialogTrigger
 } from '@/components/ui/dialog'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { ArrowDownCircle, ArrowUpCircle } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Input } from '@/components/ui/input'
@@ -20,23 +20,35 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select'
-import { TransactionType } from '@/types'
+import { TransactionType, type Transaction } from '@/types'
 import { useMutation, useQuery } from '@apollo/client/react'
 import { LIST_CATEGORIES_SELECT } from '@/lib/graphql/queries/ListCategories'
 import { CREATE_TRANSACTION } from '@/lib/graphql/mutations/CreateTransaction'
 import { LIST_TRANSACTIONS } from '@/lib/graphql/queries/ListTransactions'
 import { GET_SUMMARY } from '@/lib/graphql/queries/GetSummary'
+import { UPDATE_TRANSACTION } from '@/lib/graphql/mutations/UpdateTransaction'
 
-type NewTransactionDialogProps = {
+type TransactionDialogProps = {
   children: React.ReactNode
+  transaction?: Transaction
 }
 
-export const NewTransactionDialog = ({ children }: NewTransactionDialogProps) => {
+export const TransactionDialog = ({ children, transaction }: TransactionDialogProps) => {
   const [type, setType] = useState<TransactionType>(TransactionType.EXPENSE)
   const [description, setDescription] = useState('')
   const [amount, setAmount] = useState('')
   const [date, setDate] = useState('')
   const [categoryId, setCategoryId] = useState('')
+
+  useEffect(() => {
+    if (transaction) {
+      setType(transaction.type)
+      setDescription(transaction.description)
+      setAmount((transaction.amount / 100).toString().replace('.', ','))
+      setDate(transaction.date.slice(0, 10))
+      setCategoryId(transaction.categoryId)
+    }
+  }, [transaction])
 
   const { data, loading } = useQuery(LIST_CATEGORIES_SELECT)
   const categoryOptions = data?.listCategories ?? []
@@ -45,14 +57,34 @@ export const NewTransactionDialog = ({ children }: NewTransactionDialogProps) =>
     refetchQueries: [LIST_TRANSACTIONS, GET_SUMMARY]
   })
 
+  const [updateTransaction] = useMutation(UPDATE_TRANSACTION, {
+    refetchQueries: [LIST_TRANSACTIONS, GET_SUMMARY]
+  })
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    if (transaction) {
+      updateTransaction({
+        variables: {
+          id: transaction.id,
+          data: {
+            type,
+            description,
+            amount: parseFloat(amount.replace(',', '.')) * 100,
+            date: new Date(date).toISOString(),
+            categoryId
+          }
+        }
+      })
+      return
+    }
+
     createTransaction({
       variables: {
         data: {
           type,
           description,
-          amount: parseFloat(amount) * 100,
+          amount: parseFloat(amount.replace(',', '.')) * 100,
           date: new Date(date).toISOString(),
           categoryId
         }
@@ -60,12 +92,14 @@ export const NewTransactionDialog = ({ children }: NewTransactionDialogProps) =>
     })
   }
 
+  const dialogTitle = transaction ? 'Editar transação' : 'Nova transação'
+
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
-          <DialogTitle>Nova transação</DialogTitle>
+          <DialogTitle>{dialogTitle}</DialogTitle>
           <DialogDescription>Registre sua despesa ou receita</DialogDescription>
         </DialogHeader>
 
