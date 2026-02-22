@@ -236,30 +236,41 @@ const TransactionsPage = () => {
           </table>
 
           <div className="flex items-center justify-between border-t border-gray-100 px-6 py-4">
-            <Button
-              variant="outline"
-              className="gap-2"
-              disabled={page === 1 || loading}
-              onClick={() => setPage(p => Math.max(1, p - 1))}
-            >
-              <ChevronLeft className="size-4" />
-              Anterior
-            </Button>
-            <div className="flex items-center gap-2">
-              <PaginationButton isActive>{page}</PaginationButton>
-              {hasMore && (
-                <PaginationButton onClick={() => setPage(p => p + 1)}>{page + 1}</PaginationButton>
-              )}
+            {/* Left: current range + total */}
+            <span className="text-sm text-gray-500">
+              {filteredTransactions.length === 0
+                ? '0 resultados'
+                : `${(page - 1) * ITEMS_PER_PAGE + 1} a ${Math.min(page * ITEMS_PER_PAGE, filteredTransactions.length)} | ${filteredTransactions.length} resultados`}
+            </span>
+
+            {/* Right: prev / page buttons / next */}
+            <div className="flex items-center gap-1">
+              <PaginationButton
+                onClick={() => setPage(p => Math.max(1, p - 1))}
+                disabled={page === 1 || loading}
+              >
+                <ChevronLeft className="size-4" />
+              </PaginationButton>
+
+              {(() => {
+                // Always show up to 3 consecutive pages centred on current page
+                let start = Math.max(1, page - 1)
+                const end = Math.min(totalPages, start + 2)
+                start = Math.max(1, end - 2)
+                return Array.from({ length: end - start + 1 }, (_, i) => start + i).map(p => (
+                  <PaginationButton key={p} isActive={p === page} onClick={() => setPage(p)}>
+                    {p}
+                  </PaginationButton>
+                ))
+              })()}
+
+              <PaginationButton
+                onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+                disabled={!hasMore || loading}
+              >
+                <ChevronRight className="size-4" />
+              </PaginationButton>
             </div>
-            <Button
-              variant="outline"
-              className="gap-2"
-              disabled={!hasMore || loading}
-              onClick={() => setPage(p => p + 1)}
-            >
-              Próxima
-              <ChevronRight className="size-4" />
-            </Button>
           </div>
         </CardContent>
       </Card>

@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button'
 import { forwardRef } from 'react'
 
-interface PaginationButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
+interface PaginationButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   isActive?: boolean
 }
 
