@@ -50,11 +50,8 @@ export const RecentTransactions = ({ transactions }: Props) => {
               <div className="flex items-center gap-4">
                 <Tag color={item.category?.color}>{item.category?.title}</Tag>
                 <div className="flex items-center gap-2 font-medium">
-                  <span
-                    className={
-                      item.type === TransactionType.INCOME ? 'text-gray-900' : 'text-gray-900'
-                    }
-                  >
+                  <span className="text-gray-900">
+                    {item.type === TransactionType.EXPENSE ? '-' : '+'}{' '}
                     {formatCurrency(item.amount)}
                   </span>
                   {item.type === TransactionType.INCOME ? (

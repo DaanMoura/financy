@@ -6,7 +6,12 @@ export const formatCurrency = (value: number): string => {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2
   })
-  return formatter.format(positiveValue / 100)
+
+  let prefix = ''
+  if (value < 0) {
+    prefix = '-'
+  }
+  return `${prefix} ${formatter.format(positiveValue / 100)}`
 }
 
 export const parseCurrency = (value: string): number => {

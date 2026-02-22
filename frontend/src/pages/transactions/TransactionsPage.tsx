@@ -219,6 +219,7 @@ const TransactionsPage = () => {
                       <TransactionTypeIndicator type={transaction.type} />
                     </td>
                     <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
+                      {transaction.type === TransactionType.EXPENSE ? '-' : '+'}{' '}
                       {formatCurrency(transaction.amount)}
                     </td>
                     <td className="whitespace-nowrap px-6 py-4 text-right">
