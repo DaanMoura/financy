@@ -64,14 +64,14 @@ const ProfilePage = () => {
       <Card className="w-full max-w-[500px]">
         <CardContent className="pt-8 flex flex-col items-center gap-8">
           <div className="flex flex-col items-center gap-4 text-center">
-            <UserIcon size="lg" className="h-24 w-24 text-3xl" />
+            <UserIcon size="lg" />
             <div className="space-y-1">
               <h1 className="text-xl font-bold text-gray-900">{user.name}</h1>
               <p className="text-sm text-gray-500">{user.email}</p>
             </div>
           </div>
 
-          <div className="w-full h-px bg-gray-100" />
+          <div className="w-full h-px bg-gray-200" />
 
           <form onSubmit={handleSave} className="w-full flex flex-col gap-6">
             <FieldGroup className="gap-4">
@@ -119,9 +119,9 @@ const ProfilePage = () => {
                 variant="outline"
                 onClick={handleLogout}
                 disabled={isLogoutPending}
-                className="w-full text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200"
+                className="w-full"
               >
-                <LogOut className="mr-2 h-4 w-4" />
+                <LogOut className="mr-2 h-4 w-4 text-red-base" />
                 Sair da conta
               </Button>
             </div>
