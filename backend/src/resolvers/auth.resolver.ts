@@ -19,7 +19,9 @@ export class AuthResolver {
   }
 
   @Mutation(() => LoginOutput)
-  async refreshToken(@Arg('refreshToken', () => String) refreshToken: string): Promise<LoginOutput> {
+  async refreshToken(
+    @Arg('refreshToken', () => String) refreshToken: string
+  ): Promise<LoginOutput> {
     return this.authService.refreshToken(refreshToken)
   }
 }

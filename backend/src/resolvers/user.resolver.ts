@@ -15,7 +15,10 @@ export class UserResolver {
   }
 
   @Mutation(() => UserModel)
-  async updateUser(@Arg('id', () => String) id: string, @Arg('data', () => UpdateUserInput) data: UpdateUserInput): Promise<UserModel> {
+  async updateUser(
+    @Arg('id', () => String) id: string,
+    @Arg('data', () => UpdateUserInput) data: UpdateUserInput
+  ): Promise<UserModel> {
     return this.userService.updateUser(id, data)
   }
 

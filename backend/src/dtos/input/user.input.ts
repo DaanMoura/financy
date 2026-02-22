@@ -14,4 +14,3 @@ export class UpdateUserInput {
   @Field(() => String)
   name!: string
 }
-
