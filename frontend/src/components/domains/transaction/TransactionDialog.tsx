@@ -97,22 +97,22 @@ export const TransactionDialog = ({ children, transaction }: TransactionDialogPr
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="sm:max-w-[500px]">
+      <DialogContent className="sm:max-w-[500px] pb-1">
         <DialogHeader>
           <DialogTitle>{dialogTitle}</DialogTitle>
           <DialogDescription>Registre sua despesa ou receita</DialogDescription>
         </DialogHeader>
 
         <form className="space-y-6 py-4" onSubmit={handleSubmit}>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 rounded-lg border border-gray-200 p-1 gap-1">
             <button
               type="button"
               onClick={() => setType(TransactionType.EXPENSE)}
               className={cn(
-                'flex items-center justify-center gap-2 rounded-lg border p-3 text-sm font-medium transition-colors',
+                'flex items-center justify-center gap-2 rounded-md p-3 text-sm font-medium transition-colors cursor-pointer',
                 type === TransactionType.EXPENSE
-                  ? 'border-red-500 bg-red-50 text-red-600'
-                  : 'border-slate-200 text-slate-500 hover:bg-slate-50'
+                  ? 'border border-red-base bg-gray-100 text-red-base'
+                  : 'border border-transparent text-slate-500 hover:bg-slate-50'
               )}
             >
               <ArrowDownCircle className="h-4 w-4" />
@@ -122,10 +122,10 @@ export const TransactionDialog = ({ children, transaction }: TransactionDialogPr
               type="button"
               onClick={() => setType(TransactionType.INCOME)}
               className={cn(
-                'flex items-center justify-center gap-2 rounded-lg border p-3 text-sm font-medium transition-colors',
+                'flex items-center justify-center gap-2 rounded-md p-3 text-sm font-medium transition-colors cursor-pointer',
                 type === TransactionType.INCOME
-                  ? 'border-emerald-500 bg-emerald-50 text-emerald-600'
-                  : 'border-slate-200 text-slate-500 hover:bg-slate-50'
+                  ? 'border border-brand-base bg-gray-100 text-brand-base'
+                  : 'border border-transparent text-slate-500 hover:bg-slate-50'
               )}
             >
               <ArrowUpCircle className="h-4 w-4" />
@@ -159,7 +159,7 @@ export const TransactionDialog = ({ children, transaction }: TransactionDialogPr
             <div className="space-y-2">
               <Label htmlFor="amount">Valor</Label>
               <div className="relative">
-                <span className="absolute left-3 top-2.5 text-sm font-medium text-slate-500">
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm font-medium text-slate-500">
                   R$
                 </span>
                 <Input
@@ -176,7 +176,7 @@ export const TransactionDialog = ({ children, transaction }: TransactionDialogPr
           <div className="space-y-2">
             <Label>Categoria</Label>
             <Select disabled={loading} value={categoryId} onValueChange={setCategoryId}>
-              <SelectTrigger>
+              <SelectTrigger className="w-full">
                 <SelectValue placeholder="Selecione" />
               </SelectTrigger>
               <SelectContent>
@@ -189,7 +189,7 @@ export const TransactionDialog = ({ children, transaction }: TransactionDialogPr
             </Select>
           </div>
 
-          <DialogClose>
+          <DialogClose className="w-full">
             <Button type="submit" className="w-full">
               Salvar
             </Button>
