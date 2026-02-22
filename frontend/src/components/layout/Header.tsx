@@ -12,7 +12,7 @@ const Header = () => {
   }
 
   return (
-    <header className="bg-neutral-white border-b border-b-gray-200 flex absolute top-0 left-0 right-0 justify-between items-center px-12 py-4">
+    <header className="bg-neutral-white border-b border-b-gray-200 flex fixed top-0 left-0 right-0 justify-between items-center px-12 py-4">
       <Link to="/">
         <img className="mx-auto" src={logo} alt="Financy logo" />
       </Link>
