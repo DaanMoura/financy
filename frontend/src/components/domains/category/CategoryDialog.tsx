@@ -89,7 +89,7 @@ const CategoryDialog = ({ children, category }: CategoryDialogProps) => {
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="sm:max-w-[500px]">
+      <DialogContent className="sm:max-w-[440px]">
         <DialogHeader>
           <DialogTitle>{dialogTitle}</DialogTitle>
           <DialogDescription>Organize suas transações com categorias</DialogDescription>
@@ -119,7 +119,7 @@ const CategoryDialog = ({ children, category }: CategoryDialogProps) => {
 
           <div className="space-y-2">
             <Label>Ícone</Label>
-            <div className="grid grid-cols-8 gap-2">
+            <div className="grid grid-cols-8 gap-3">
               {icons.map(icon => (
                 <button
                   key={icon}
@@ -143,7 +143,7 @@ const CategoryDialog = ({ children, category }: CategoryDialogProps) => {
 
           <div className="space-y-2">
             <Label>Cor</Label>
-            <div className="flex gap-4">
+            <div className="flex flex-wrap gap-4">
               {CATEGORY_COLOR_NAMES.map(color => (
                 <button
                   key={color}
