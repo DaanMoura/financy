@@ -8,9 +8,6 @@ type Color = {
 
 export const CATEGORY_COLOR_NAMES = ['green', 'blue', 'purple', 'pink', 'red', 'orange', 'yellow'] as const
 
-
-
-
 export const categoryColors: Record<CategoryColorName, Color> = {} as Record<CategoryColorName, Color>
 CATEGORY_COLOR_NAMES.forEach(color => {
   categoryColors[color] = {
@@ -19,4 +16,5 @@ CATEGORY_COLOR_NAMES.forEach(color => {
     light: `${color}-light`
   }
 })
+
 

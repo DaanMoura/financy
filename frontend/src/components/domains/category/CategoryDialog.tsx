@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -14,23 +15,35 @@ import { DynamicIcon } from 'lucide-react/dynamic'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import { useState } from 'react'
 import { cn } from '@/lib/utils'
 import { useMutation } from '@apollo/client/react'
 import { CREATE_CATEGORY } from '@/lib/graphql/mutations/CreateCategory'
 import { DialogClose } from '@radix-ui/react-dialog'
 import { LIST_CATEGORIES, LIST_CATEGORIES_SELECT } from '@/lib/graphql/queries/ListCategories'
 import { GET_SUMMARY } from '@/lib/graphql/queries/GetSummary'
+import { type Category } from '@/types'
+import { UPDATE_CATEGORY } from '@/lib/graphql/mutations/UpdateCategory'
+import { getCategoryColor } from '@/utils/categoryColors'
 
-type NewCategoryDialogProps = {
+type CategoryDialogProps = {
   children: React.ReactNode
+  category?: Category
 }
 
-const NewCategoryDialog = ({ children }: NewCategoryDialogProps) => {
+const CategoryDialog = ({ children, category }: CategoryDialogProps) => {
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [selectedIcon, setSelectedIcon] = useState<CategoryIcon>(CategoryIcon.BRIEFCASE)
   const [selectedColor, setSelectedColor] = useState<CategoryColorName>('green')
+
+  useEffect(() => {
+    if (category) {
+      setTitle(category.title)
+      setDescription(category.description ?? '')
+      setSelectedIcon(category.icon ?? CategoryIcon.BRIEFCASE)
+      setSelectedColor(category.color ?? 'green')
+    }
+  }, [category])
 
   const icons = Object.values(CategoryIcon)
 
@@ -38,8 +51,27 @@ const NewCategoryDialog = ({ children }: NewCategoryDialogProps) => {
     refetchQueries: [LIST_CATEGORIES, LIST_CATEGORIES_SELECT, GET_SUMMARY]
   })
 
+  const [updateCategory] = useMutation(UPDATE_CATEGORY, {
+    refetchQueries: [LIST_CATEGORIES, LIST_CATEGORIES_SELECT, GET_SUMMARY]
+  })
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    if (category) {
+      updateCategory({
+        variables: {
+          id: category.id,
+          data: {
+            title,
+            description,
+            icon: selectedIcon,
+            color: selectedColor
+          }
+        }
+      })
+      return
+    }
+
     createCategory({
       variables: {
         data: {
@@ -52,12 +84,14 @@ const NewCategoryDialog = ({ children }: NewCategoryDialogProps) => {
     })
   }
 
+  const dialogTitle = category ? 'Editar categoria' : 'Nova categoria'
+
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
-          <DialogTitle>Nova categoria</DialogTitle>
+          <DialogTitle>{dialogTitle}</DialogTitle>
           <DialogDescription>Organize suas transações com categorias</DialogDescription>
         </DialogHeader>
 
@@ -108,7 +142,7 @@ const NewCategoryDialog = ({ children }: NewCategoryDialogProps) => {
           </div>
 
           <div className="space-y-2">
-            <Label>Cor {categoryColors[selectedColor].base}</Label>
+            <Label>Cor {getCategoryColor(selectedColor).base}</Label>
             <div className="flex gap-4">
               {CATEGORY_COLOR_NAMES.map(color => (
                 <button
@@ -120,7 +154,7 @@ const NewCategoryDialog = ({ children }: NewCategoryDialogProps) => {
                     `ring-1 ring-offset-4 ${selectedColor === color ? `ring-brand-base` : 'ring-gray-300'}`,
                     `hover:ring-brand-base`
                   )}
-                  style={{ backgroundColor: `var(--color-${categoryColors[color].base})` }}
+                  style={{ backgroundColor: `var(--color-${getCategoryColor(color).base})` }}
                 />
               ))}
             </div>
@@ -137,4 +171,4 @@ const NewCategoryDialog = ({ children }: NewCategoryDialogProps) => {
   )
 }
 
-export default NewCategoryDialog
+export default CategoryDialog

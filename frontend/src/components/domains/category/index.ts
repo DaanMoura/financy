@@ -1,1 +1,1 @@
-export * from './NewCategoryDialog'
+export * from './CategoryDialog'

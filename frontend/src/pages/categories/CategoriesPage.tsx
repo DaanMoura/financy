@@ -16,7 +16,7 @@ import { useMutation, useQuery } from '@apollo/client/react'
 import { ArrowUpDown, SquarePen, TagIcon, Trash, Plus } from 'lucide-react'
 import { useMemo } from 'react'
 import { DynamicIcon } from 'lucide-react/dynamic'
-import NewCategoryDialog from '../../components/domains/category/NewCategoryDialog'
+import CategoryDialog from '@/components/domains/category/CategoryDialog'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { DELETE_CATEGORY } from '@/lib/graphql/mutations/DeleteCategory'
@@ -53,12 +53,12 @@ const CategoriesPage = () => {
           <h1 className="text-2xl font-bold">Categorias</h1>
           <p className="text-muted-foreground text-sm">Organize suas transações por categorias</p>
         </div>
-        <NewCategoryDialog>
+        <CategoryDialog>
           <Button size="sm">
             <Plus />
             Nova categoria
           </Button>
-        </NewCategoryDialog>
+        </CategoryDialog>
       </div>
 
       <div className="grid grid-cols-3 gap-6">
@@ -121,7 +121,9 @@ const CategoriesPage = () => {
                     onClick={() => handleDelete(category.id)}
                     icon={<Trash className="text-destructive h-4 w-4" />}
                   />
-                  <IconButton icon={<SquarePen className="h-4 w-4" />} />
+                  <CategoryDialog category={category}>
+                    <IconButton icon={<SquarePen className="h-4 w-4" />} />
+                  </CategoryDialog>
                 </CardAction>
               </CardHeader>
               <CardContent className="h-24">
