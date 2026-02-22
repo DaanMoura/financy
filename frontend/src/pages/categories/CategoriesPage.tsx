@@ -11,14 +11,12 @@ import {
 } from '@/components/ui/card'
 import { LIST_CATEGORIES, LIST_CATEGORIES_SELECT } from '@/lib/graphql/queries/ListCategories'
 import { CategoryIcon } from '@/types'
-import { getCategoryIconName } from '@/utils/categoryIcons'
-import { getCategoryColor } from '@/utils/categoryColors'
 import { useMutation, useQuery } from '@apollo/client/react'
 import { ArrowUpDown, SquarePen, TagIcon, Trash, Plus } from 'lucide-react'
 import { useMemo } from 'react'
-import { DynamicIcon } from 'lucide-react/dynamic'
 import CategoryDialog from '@/components/domains/category/CategoryDialog'
-import { cn } from '@/lib/utils'
+import { CategoryIconBadge } from '@/components/domains/category'
+
 import { Button } from '@/components/ui/button'
 import { DELETE_CATEGORY } from '@/lib/graphql/mutations/DeleteCategory'
 import { GET_SUMMARY } from '@/lib/graphql/queries/GetSummary'
@@ -86,14 +84,11 @@ const CategoriesPage = () => {
           </div>
         </Card>
         <Card className="flex flex-row items-center gap-4 p-6">
-          <div
-            className={cn(
-              'flex h-12 w-12 items-center justify-center p-2.5',
-              getCategoryColor(mostUsedCategory?.color).text
-            )}
-          >
-            <DynamicIcon name={getCategoryIconName(mostUsedCategory?.icon ?? CategoryIcon.HOME)} />
-          </div>
+          <CategoryIconBadge
+            color={mostUsedCategory?.color}
+            icon={mostUsedCategory?.icon ?? CategoryIcon.HOME}
+            className="h-12 w-12"
+          />
           <div>
             <h2 className="text-2xl font-bold">{mostUsedCategory?.title}</h2>
             <p className="text-muted-foreground text-xs font-medium uppercase">
@@ -108,15 +103,7 @@ const CategoriesPage = () => {
           return (
             <Card key={category.id}>
               <CardHeader>
-                <div
-                  className={cn(
-                    'flex h-10 w-10 items-center justify-center rounded-lg p-2.5',
-                    getCategoryColor(category.color).text,
-                    getCategoryColor(category.color).bgLight
-                  )}
-                >
-                  <DynamicIcon name={getCategoryIconName(category.icon)} />
-                </div>
+                <CategoryIconBadge color={category.color} icon={category.icon} />
                 <CardAction className="flex gap-2">
                   <IconButton
                     onClick={() => handleDelete(category.id)}

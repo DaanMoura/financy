@@ -15,6 +15,7 @@ import { TransactionDialog } from '@/components/domains/transaction'
 import { DELETE_TRANSACTION } from '@/lib/graphql/mutations/DeleteTransaction'
 import { GET_SUMMARY } from '@/lib/graphql/queries/GetSummary'
 import { formatCurrency } from '@/utils/currencyFormatter'
+import { CategoryIconBadge } from '@/components/domains/category'
 
 const ITEMS_PER_PAGE = 10
 
@@ -207,7 +208,13 @@ const TransactionsPage = () => {
                 paginatedTransactions.map(transaction => (
                   <tr key={transaction.id} className="hover:bg-gray-50/50">
                     <td className="whitespace-nowrap px-6 py-4 text-md font-medium text-gray-800">
-                      {transaction.description}
+                      <div className="flex items-center gap-4">
+                        <CategoryIconBadge
+                          color={transaction.category?.color}
+                          icon={transaction.category?.icon}
+                        />
+                        {transaction.description}
+                      </div>
                     </td>
                     <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
                       {new Date(transaction.date).toLocaleDateString('pt-BR')}
