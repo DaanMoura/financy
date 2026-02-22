@@ -1,19 +1,22 @@
+import { getCategoryColor } from '@/utils/categoryColors'
+import type { CategoryColorName } from '@/types'
 import { cn } from '@/lib/utils'
 import * as React from 'react'
 
-interface TagProps extends React.HTMLAttributes<HTMLSpanElement> {
+interface TagProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, 'color'> {
   children: React.ReactNode
-  color?: string
+  color?: CategoryColorName | null
   className?: string
 }
 
 export function Tag({ children, className, color, ...props }: TagProps) {
+  const colors = getCategoryColor(color)
   return (
     <span
       className={cn(
         'rounded-full px-3 py-1 text-sm font-medium',
-        `bg-${color}-light`,
-        `text-${color}-base`,
+        colors.bgLight,
+        colors.text,
         className
       )}
       {...props}

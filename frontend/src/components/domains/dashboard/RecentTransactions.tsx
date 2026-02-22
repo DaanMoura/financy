@@ -5,6 +5,7 @@ import { ArrowDownCircle, ArrowUpCircle, ChevronRight, Plus } from 'lucide-react
 import { TransactionType, type Transaction } from '@/types'
 import { DynamicIcon } from 'lucide-react/dynamic'
 import { getCategoryIconName } from '@/utils/categoryIcons'
+import { getCategoryColor } from '@/utils/categoryColors'
 import { formatCurrency } from '@/utils/currencyFormatter'
 import { TransactionDialog } from '../transaction'
 import { Link } from 'react-router-dom'
@@ -34,7 +35,9 @@ export const RecentTransactions = ({ transactions }: Props) => {
           {transactions.map((item, index) => (
             <div key={index} className="flex items-center justify-between p-4 hover:bg-gray-50">
               <div className="flex items-center gap-4">
-                <div className={`flex h-10 w-10 items-center justify-center rounded-lg`}>
+                <div
+                  className={`flex h-10 w-10 items-center justify-center rounded-lg ${getCategoryColor(item.category?.color).bgLight} ${getCategoryColor(item.category?.color).text}`}
+                >
                   <DynamicIcon name={getCategoryIconName(item.category?.icon)} />
                 </div>
                 <div>

@@ -1,6 +1,10 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+/* Safelist category color classes so Tailwind v4 doesn't purge them.
+   These are generated dynamically at runtime via getCategoryColor(). */
+@source inline("{bg,text}-{green,blue,purple,pink,red,orange,yellow}-{base,dark,light}");
+
 @custom-variant dark (&:is(.dark *));
 
 @theme {

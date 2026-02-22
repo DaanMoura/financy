@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/dialog'
 import { CategoryIcon, type CategoryColorName } from '@/types'
 import { getCategoryIconName } from '@/utils/categoryIcons'
-import { CATEGORY_COLOR_NAMES, categoryColors } from '@/constants/colors'
+import { CATEGORY_COLOR_NAMES } from '@/constants/colors'
 import { DynamicIcon } from 'lucide-react/dynamic'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -142,7 +142,7 @@ const CategoryDialog = ({ children, category }: CategoryDialogProps) => {
           </div>
 
           <div className="space-y-2">
-            <Label>Cor {getCategoryColor(selectedColor).base}</Label>
+            <Label>Cor</Label>
             <div className="flex gap-4">
               {CATEGORY_COLOR_NAMES.map(color => (
                 <button
@@ -151,10 +151,10 @@ const CategoryDialog = ({ children, category }: CategoryDialogProps) => {
                   onClick={() => setSelectedColor(color)}
                   className={cn(
                     'h-5 w-10 rounded transition-all cursor-pointer',
+                    getCategoryColor(color).bg,
                     `ring-1 ring-offset-4 ${selectedColor === color ? `ring-brand-base` : 'ring-gray-300'}`,
                     `hover:ring-brand-base`
                   )}
-                  style={{ backgroundColor: `var(--color-${getCategoryColor(color).base})` }}
                 />
               ))}
             </div>

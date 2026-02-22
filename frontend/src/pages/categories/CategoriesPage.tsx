@@ -12,6 +12,7 @@ import {
 import { LIST_CATEGORIES, LIST_CATEGORIES_SELECT } from '@/lib/graphql/queries/ListCategories'
 import { CategoryIcon } from '@/types'
 import { getCategoryIconName } from '@/utils/categoryIcons'
+import { getCategoryColor } from '@/utils/categoryColors'
 import { useMutation, useQuery } from '@apollo/client/react'
 import { ArrowUpDown, SquarePen, TagIcon, Trash, Plus } from 'lucide-react'
 import { useMemo } from 'react'
@@ -88,7 +89,7 @@ const CategoriesPage = () => {
           <div
             className={cn(
               'flex h-12 w-12 items-center justify-center p-2.5',
-              `text-${mostUsedCategory?.color}-base`
+              getCategoryColor(mostUsedCategory?.color).text
             )}
           >
             <DynamicIcon name={getCategoryIconName(mostUsedCategory?.icon ?? CategoryIcon.HOME)} />
@@ -110,8 +111,8 @@ const CategoriesPage = () => {
                 <div
                   className={cn(
                     'flex h-10 w-10 items-center justify-center rounded-lg p-2.5',
-                    `text-${category.color}-base`,
-                    `bg-${category.color}-light`
+                    getCategoryColor(category.color).text,
+                    getCategoryColor(category.color).bgLight
                   )}
                 >
                   <DynamicIcon name={getCategoryIconName(category.icon)} />
