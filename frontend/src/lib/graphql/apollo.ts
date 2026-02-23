@@ -105,5 +105,10 @@ const errorLink = onError(({ graphQLErrors, operation, forward }: any) => {
 
 export const apolloClient = new ApolloClient({
   link: ApolloLink.from([errorLink, authLink, httpLink]),
+  defaultOptions: {
+    watchQuery: {
+      fetchPolicy: 'cache-and-network'
+    },
+  },
   cache: new InMemoryCache()
 })

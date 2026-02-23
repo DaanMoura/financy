@@ -22,7 +22,7 @@ import {
 } from '@/components/ui/select'
 import { TransactionType, type Transaction } from '@/types'
 import { useMutation, useQuery } from '@apollo/client/react'
-import { LIST_CATEGORIES_SELECT } from '@/lib/graphql/queries/ListCategories'
+import { LIST_CATEGORIES, LIST_CATEGORIES_FOR_DASHBOARD, LIST_CATEGORIES_SELECT } from '@/lib/graphql/queries/ListCategories'
 import { CREATE_TRANSACTION } from '@/lib/graphql/mutations/CreateTransaction'
 import { LIST_TRANSACTIONS } from '@/lib/graphql/queries/ListTransactions'
 import { GET_SUMMARY } from '@/lib/graphql/queries/GetSummary'
@@ -54,11 +54,11 @@ export const TransactionDialog = ({ children, transaction }: TransactionDialogPr
   const categoryOptions = data?.listCategories ?? []
 
   const [createTransaction] = useMutation(CREATE_TRANSACTION, {
-    refetchQueries: [LIST_TRANSACTIONS, GET_SUMMARY]
+    refetchQueries: [LIST_TRANSACTIONS, GET_SUMMARY, LIST_CATEGORIES, LIST_CATEGORIES_FOR_DASHBOARD]
   })
 
   const [updateTransaction] = useMutation(UPDATE_TRANSACTION, {
-    refetchQueries: [LIST_TRANSACTIONS, GET_SUMMARY]
+    refetchQueries: [LIST_TRANSACTIONS, GET_SUMMARY, LIST_CATEGORIES, LIST_CATEGORIES_FOR_DASHBOARD]
   })
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
